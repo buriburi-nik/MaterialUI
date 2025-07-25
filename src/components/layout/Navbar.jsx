@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Menu, X, Globe, ChevronDown } from "lucide-react";
@@ -8,15 +8,18 @@ export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
 
+  // Prevent background scroll when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+  }, [isMobileMenuOpen]);
+
   return (
-    <nav
-      className={cn(
-        "fixed top-0 left-0 right-0 z-50",
-        "bg-white border-b border-gray-200 shadow-sm",
-        "overflow-x-hidden"
-      )}
-    >
-      <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+    <nav className={cn("fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200 shadow-sm")}>
+      <div className="w-full px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex items-center">
@@ -33,25 +36,17 @@ export default function Navbar() {
               </span>
               <ChevronDown className="w-4 h-4 text-gray-500" />
             </div>
-            <a
-              href="#brands"
-              className="text-gray-700 transition-colors hover:text-gray-900"
-            >
+            <a href="#brands" className="text-gray-700 transition-colors hover:text-gray-900">
               Brands
             </a>
           </div>
 
           {/* Desktop Actions */}
-          <div className="items-center hidden space-x-4 md:flex">
+          <div className="items-center hidden ml-auto space-x-4 md:flex">
             <Button variant="ghost" size="sm" className="text-gray-700">
               <Globe className="w-4 h-4" />
             </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="text-gray-700"
-              onClick={() => navigate("/signin")}
-            >
+            <Button variant="ghost" size="sm" className="text-gray-700" onClick={() => navigate("/signin")}>
               Sign In
             </Button>
             <Button
@@ -80,9 +75,9 @@ export default function Navbar() {
 
       {/* ===== MOBILE NAVIGATION ===== */}
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-[60] w-dvw h-dvh md:hidden bg-black/40">
-          <div className="absolute top-16 left-0 w-dvh h-[calc(100dvh-4rem)] bg-white border-t border-gray-200 shadow-lg overflow-y-auto transition-all">
-            {/* Close (X) button inside overlay */}
+        <div className="fixed inset-0 z-[60] w-full h-full md:hidden bg-black/30">
+<div className="absolute top-16 left-0 w-full max-h-[calc(100vh-4rem)] bg-white border-t border-gray-200 shadow-lg overflow-y-auto transition-all">
+            {/* Close (X) button */}
             <div className="flex justify-end px-4 pt-2">
               <Button
                 variant="ghost"
@@ -94,7 +89,6 @@ export default function Navbar() {
                 <X className="w-6 h-6" />
               </Button>
             </div>
-
             <div className="px-4 py-3 space-y-3">
               {/* Products dropdown */}
               <div className="flex items-center justify-between px-3 py-3 transition-colors rounded-md cursor-pointer hover:bg-gray-50">
