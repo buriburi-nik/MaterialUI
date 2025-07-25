@@ -79,7 +79,7 @@ export default function Navbar() {
 
         {/* ===== MOBILE NAVIGATION ===== */}
         {isMobileMenuOpen && (
-          <div className="fixed inset-0 z-[60] w-full md:hidden bg-black/30">
+          <div className="fixed inset-0 z-[60] w-dvw md:hidden bg-black/30">
             <div className="absolute top-16 left-0 w-full bg-white border-t border-gray-200 shadow-lg overflow-y-auto max-h-[calc(100vh-4rem)] transition-all">
               {/* Close (X) button inside overlay */}
               <div className="flex justify-end px-4 pt-2">
