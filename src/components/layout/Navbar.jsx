@@ -12,21 +12,21 @@ export default function Navbar() {
     <nav
       className={cn(
         "fixed top-0 left-0 right-0 z-50",
-        "bg-white border-b border-gray-200",
-        "shadow-sm"
+        "bg-white border-b border-gray-200 shadow-sm",
+        "overflow-x-hidden"
       )}
     >
       <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
-        <div className="flex items-center h-16">
+        <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <div className="flex items-center mr-8">
+          <div className="flex items-center">
             <div className="flex items-center justify-center w-8 h-8 bg-black rounded">
               <span className="text-lg font-bold text-white">M</span>
             </div>
           </div>
 
           {/* Desktop Navigation */}
-          <div className="items-center flex-1 hidden space-x-8 md:flex">
+          <div className="items-center flex-1 hidden ml-8 space-x-8 md:flex">
             <div className="flex items-center space-x-1 cursor-pointer">
               <span className="text-gray-700 transition-colors hover:text-gray-900">
                 Products
@@ -42,7 +42,7 @@ export default function Navbar() {
           </div>
 
           {/* Desktop Actions */}
-          <div className="items-center hidden ml-auto space-x-4 md:flex">
+          <div className="items-center hidden space-x-4 md:flex">
             <Button variant="ghost" size="sm" className="text-gray-700">
               <Globe className="w-4 h-4" />
             </Button>
@@ -64,7 +64,7 @@ export default function Navbar() {
           </div>
 
           {/* Mobile menu button */}
-          <div className="ml-auto md:hidden">
+          <div className="md:hidden">
             <Button
               variant="ghost"
               size="sm"
@@ -76,81 +76,82 @@ export default function Navbar() {
             </Button>
           </div>
         </div>
+      </div>
 
-        {/* ===== MOBILE NAVIGATION ===== */}
-        {isMobileMenuOpen && (
-          <div className="fixed inset-0 z-[60] w-dvw h-dvh md:hidden bg-black/30">
-            <div className="absolute top-16 left-0 w-full h-[calc(100dvh-4rem)] bg-white border-t border-gray-200 shadow-lg overflow-y-auto transition-all">
-              {/* Close (X) button inside overlay */}
-              <div className="flex justify-end px-4 pt-2">
+      {/* ===== MOBILE NAVIGATION ===== */}
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 z-[60] w-dvw h-dvh md:hidden bg-black/40">
+          <div className="absolute top-16 left-0 w-dvh h-[calc(100dvh-4rem)] bg-white border-t border-gray-200 shadow-lg overflow-y-auto transition-all">
+            {/* Close (X) button inside overlay */}
+            <div className="flex justify-end px-4 pt-2">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="p-2"
+                aria-label="Close menu"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                <X className="w-6 h-6" />
+              </Button>
+            </div>
+
+            <div className="px-4 py-3 space-y-3">
+              {/* Products dropdown */}
+              <div className="flex items-center justify-between px-3 py-3 transition-colors rounded-md cursor-pointer hover:bg-gray-50">
+                <span className="font-medium text-gray-700">Products</span>
+                <ChevronDown className="w-4 h-4 text-gray-500" />
+              </div>
+
+              {/* Brands link */}
+              <a
+                href="#brands"
+                className="block px-3 py-3 font-medium text-gray-700 transition-colors rounded-md hover:text-gray-900 hover:bg-gray-50"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Brands
+              </a>
+
+              {/* Divider */}
+              <div className="my-2 border-t border-gray-200"></div>
+
+              {/* Mobile Actions */}
+              <div className="space-y-3">
                 <Button
                   variant="ghost"
-                  size="icon"
-                  className="p-2"
-                  aria-label="Close menu"
-                  onClick={() => setIsMobileMenuOpen(false)}
+                  size="default"
+                  className="justify-start w-full h-12 text-gray-700 hover:text-gray-900 hover:bg-gray-50"
                 >
-                  <X className="w-6 h-6" />
+                  <Globe className="w-4 h-4 mr-3" />
+                  Language
                 </Button>
-              </div>
-              <div className="px-4 py-3 space-y-3">
-                {/* Products dropdown */}
-                <div className="flex items-center justify-between px-3 py-3 transition-colors rounded-md cursor-pointer hover:bg-gray-50">
-                  <span className="font-medium text-gray-700">Products</span>
-                  <ChevronDown className="w-4 h-4 text-gray-500" />
-                </div>
 
-                {/* Brands link */}
-                <a
-                  href="#brands"
-                  className="block px-3 py-3 font-medium text-gray-700 transition-colors rounded-md hover:text-gray-900 hover:bg-gray-50"
-                  onClick={() => setIsMobileMenuOpen(false)}
+                <Button
+                  variant="ghost"
+                  size="default"
+                  className="justify-start w-full h-12 text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    navigate("/signin");
+                  }}
                 >
-                  Brands
-                </a>
+                  Sign In
+                </Button>
 
-                {/* Divider */}
-                <div className="my-3 border-t border-gray-200"></div>
-
-                {/* Mobile Actions */}
-                <div className="space-y-3">
-                  <Button
-                    variant="ghost"
-                    size="default"
-                    className="justify-start w-full h-12 text-gray-700 hover:text-gray-900 hover:bg-gray-50"
-                  >
-                    <Globe className="w-4 h-4 mr-3" />
-                    Language
-                  </Button>
-
-                  <Button
-                    variant="ghost"
-                    size="default"
-                    className="justify-start w-full h-12 text-gray-700 hover:text-gray-900 hover:bg-gray-50"
-                    onClick={() => {
-                      setIsMobileMenuOpen(false);
-                      navigate("/signin");
-                    }}
-                  >
-                    Sign In
-                  </Button>
-
-                  <Button
-                    size="default"
-                    className="w-full h-12 text-white bg-black hover:bg-gray-800"
-                    onClick={() => {
-                      setIsMobileMenuOpen(false);
-                      navigate("/register");
-                    }}
-                  >
-                    Join for free
-                  </Button>
-                </div>
+                <Button
+                  size="default"
+                  className="w-full h-12 text-white bg-black hover:bg-gray-800"
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    navigate("/register");
+                  }}
+                >
+                  Join for free
+                </Button>
               </div>
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </nav>
   );
 }

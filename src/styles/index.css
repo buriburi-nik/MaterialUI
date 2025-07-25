@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
 @layer base {
   :root {
     /* Light theme colors */
@@ -55,7 +61,7 @@
   }
 
   body {
-    @apply bg-background text-foreground font-sans antialiased;
+    @apply font-sans antialiased bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 
@@ -73,7 +79,7 @@
 @layer components {
   /* Container component */
   .container {
-    @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
+    @apply px-4 mx-auto max-w-7xl sm:px-6 lg:px-8;
   }
 
   /* Section spacing */
@@ -83,19 +89,19 @@
 
   /* Typography utilities */
   .heading-1 {
-    @apply text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight;
+    @apply text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl;
   }
 
   .heading-2 {
-    @apply text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight;
+    @apply text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl;
   }
 
   .heading-3 {
-    @apply text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight;
+    @apply text-2xl font-semibold tracking-tight sm:text-3xl lg:text-4xl;
   }
 
   .heading-4 {
-    @apply text-xl sm:text-2xl lg:text-3xl font-semibold tracking-tight;
+    @apply text-xl font-semibold tracking-tight sm:text-2xl lg:text-3xl;
   }
 
   .body-large {
@@ -136,7 +142,7 @@
 
   /* Accessibility utilities */
   .sr-only {
-    @apply absolute w-px h-px p-0 -m-px overflow-hidden whitespace-nowrap border-0;
+    @apply absolute w-px h-px p-0 -m-px overflow-hidden border-0 whitespace-nowrap;
     clip: rect(0, 0, 0, 0);
   }
 }
