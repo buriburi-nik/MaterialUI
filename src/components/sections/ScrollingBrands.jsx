@@ -36,22 +36,22 @@ export default function ScrollingBrands() {
   const extendedBrands = [...brands, ...brands, ...brands];
 
   return (
-    <section className="bg-white py-20 overflow-hidden relative">
-      <div className="container mx-auto px-4 text-center mb-12">
-        <h2 className="text-4xl md:text-5xl font-bold text-slate-800 mb-4">
+    <section className="relative py-20 overflow-hidden bg-white">
+      <div className="container px-4 mx-auto mb-12 text-center">
+        <h2 className="mb-4 text-4xl font-bold md:text-5xl text-slate-800">
           Hundreds of leading brands
         </h2>
-        <h2 className="text-4xl md:text-5xl font-bold text-slate-800 mb-6">
+        <h2 className="mb-6 text-4xl font-bold md:text-5xl text-slate-800">
           all in one place.
         </h2>
-        <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+        <p className="max-w-2xl mx-auto text-lg text-slate-600">
           Material Bank powers complex searches across hundreds of brands and
           thousands of materials in seconds.
         </p>
       </div>
 
       {/* Brand rows with wave effect - all moving right to left */}
-      <div className="space-y-6 relative">
+      <div className="relative space-y-6">
         {[0, 1, 2].map((rowIndex) => {
           const waveOffset = Math.sin(scrollY * 0.01 + rowIndex * 1.2) * 20;
           const baseTransform = -scrollY * 0.3 - rowIndex * 200;
@@ -69,7 +69,7 @@ export default function ScrollingBrands() {
                 {extendedBrands.map((brand, index) => (
                   <div
                     key={`row${rowIndex}-${index}`}
-                    className="flex-shrink-0 bg-slate-200/80 hover:bg-slate-300/80 transition-colors duration-300 rounded-full px-6 py-3 text-slate-700 font-medium text-sm whitespace-nowrap"
+                    className="flex-shrink-0 px-6 py-3 text-sm font-medium transition-colors duration-300 rounded-full bg-slate-200/80 hover:bg-slate-300/80 text-slate-700 whitespace-nowrap"
                     style={{
                       transform: `translateY(${Math.sin(scrollY * 0.02 + index * 0.3 + rowIndex * 2) * 8}px)`,
                     }}
@@ -84,8 +84,8 @@ export default function ScrollingBrands() {
       </div>
 
       {/* Gradient overlays to fade edges */}
-      <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-white via-white/80 to-transparent pointer-events-none z-10" />
-      <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-white via-white/80 to-transparent pointer-events-none z-10" />
+      <div className="absolute top-0 bottom-0 left-0 z-10 w-32 pointer-events-none bg-gradient-to-r from-white via-white/80 to-transparent" />
+      <div className="absolute top-0 bottom-0 right-0 z-10 w-32 pointer-events-none bg-gradient-to-l from-white via-white/80 to-transparent" />
     </section>
   );
 }

@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import CheckFeatureList from "../CheckFeatureList";
+import CheckFeatureList from "../X/CheckFeatureList";
 
 export default function TargetAudience() {
   const navigate = useNavigate();
@@ -23,13 +23,13 @@ export default function TargetAudience() {
   ];
 
   return (
-    <section className="bg-slate-50 py-16">
-      <div className="container mx-auto px-4">
-        <div className="grid lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
+    <section className="py-16 bg-slate-50">
+      <div className="container px-4 mx-auto">
+        <div className="grid max-w-6xl gap-8 mx-auto lg:grid-cols-2">
           {/* For Architects and Interior Designers */}
-          <Card className="bg-white border-0 shadow-lg hover:shadow-xl transition-shadow duration-300 relative overflow-hidden">
+          <Card className="relative overflow-hidden transition-shadow duration-300 bg-white border-0 shadow-lg hover:shadow-xl">
             <CardHeader className="pb-6">
-              <CardTitle className="text-2xl font-bold text-slate-800 mb-6">
+              <CardTitle className="mb-6 text-2xl font-bold text-slate-800">
                 For architects and interior designers
               </CardTitle>
               <CheckFeatureList features={architectFeatures} />
@@ -38,16 +38,16 @@ export default function TargetAudience() {
               <div className="flex items-center justify-between">
                 <Button
                   size="lg"
-                  className="bg-white text-slate-800 border border-slate-200 hover:bg-slate-50 px-8 py-3"
+                  className="px-8 py-3 bg-white border text-slate-800 border-slate-200 hover:bg-slate-50"
                   onClick={() => navigate("/register")}
                 >
                   Join for free
                 </Button>
-                <div className="w-16 h-16 rounded-full overflow-hidden bg-slate-100">
+                <div className="w-16 h-16 overflow-hidden rounded-full bg-slate-100">
                   <img
                     src="https://cdn.builder.io/api/v1/image/assets%2Fd3abc8b84bb34537b8335a0239d6fa84%2F3a31c628b8a148a0bda4b5156d6f2403?format=webp&width=800"
                     alt="Architect working on design"
-                    className="w-full h-full object-cover"
+                    className="object-cover w-full h-full"
                   />
                 </div>
               </div>
@@ -55,9 +55,9 @@ export default function TargetAudience() {
           </Card>
 
           {/* For Manufacturers */}
-          <Card className="bg-white border-0 shadow-lg hover:shadow-xl transition-shadow duration-300 relative overflow-hidden">
+          <Card className="relative overflow-hidden transition-shadow duration-300 bg-white border-0 shadow-lg hover:shadow-xl">
             <CardHeader className="pb-6">
-              <CardTitle className="text-2xl font-bold text-slate-800 mb-6">
+              <CardTitle className="mb-6 text-2xl font-bold text-slate-800">
                 For manufacturers
               </CardTitle>
               <CheckFeatureList features={manufacturerFeatures} />
@@ -66,14 +66,14 @@ export default function TargetAudience() {
               <div className="flex items-center justify-between">
                 <Button
                   size="lg"
-                  className="bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:opacity-90 px-8 py-3"
+                  className="px-8 py-3 text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:opacity-90"
                 >
                   Become a Brand Partner
                 </Button>
-                <div className="w-16 h-16 rounded-full overflow-hidden bg-gradient-to-br from-orange-300 to-orange-500 flex items-center justify-center">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center">
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-orange-500 to-orange-700 flex items-center justify-center">
-                      <div className="w-4 h-4 rounded-full bg-orange-800" />
+                <div className="flex items-center justify-center w-16 h-16 overflow-hidden rounded-full bg-gradient-to-br from-orange-300 to-orange-500">
+                  <div className="flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-br from-orange-400 to-orange-600">
+                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br from-orange-500 to-orange-700">
+                      <div className="w-4 h-4 bg-orange-800 rounded-full" />
                     </div>
                   </div>
                 </div>
@@ -83,20 +83,20 @@ export default function TargetAudience() {
         </div>
 
         {/* Additional info section */}
-        <div className="text-center mt-12">
-          <p className="text-slate-500 text-sm">
+        <div className="mt-12 text-center">
+          <p className="text-sm text-slate-500">
             Join thousands of professionals already using our platform
           </p>
-          <div className="flex justify-center items-center gap-8 mt-6 opacity-60">
-            <span className="text-slate-400 text-xs">
+          <div className="flex items-center justify-center gap-8 mt-6 opacity-60">
+            <span className="text-xs text-slate-400">
               Trusted by leading brands
             </span>
-            <div className="w-1 h-1 bg-slate-300 rounded-full" />
-            <span className="text-slate-400 text-xs">
+            <div className="w-1 h-1 rounded-full bg-slate-300" />
+            <span className="text-xs text-slate-400">
               Used in 50+ countries
             </span>
-            <div className="w-1 h-1 bg-slate-300 rounded-full" />
-            <span className="text-slate-400 text-xs">99.9% uptime SLA</span>
+            <div className="w-1 h-1 rounded-full bg-slate-300" />
+            <span className="text-xs text-slate-400">99.9% uptime SLA</span>
           </div>
         </div>
       </div>

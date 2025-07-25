@@ -4,13 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowLeft, Eye, EyeOff } from "lucide-react";
-import {
-  updateSignInForm,
-  clearSignInForm,
-  setLoading,
-  setError,
-  signInSuccess,
-} from "../../client/store/slices/authSlice";
+import{ updateSignInForm, clearSignInForm, setLoading, setError, signInSuccess } from "../../store/slices/authSlice";
 
 export default function Register() {
   const dispatch = useDispatch();
@@ -62,14 +56,14 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen bg-white flex">
+    <div className="flex min-h-screen bg-white">
       {/* Left Panel - Image and Content */}
-      <div className="hidden lg:flex lg:w-1/2 relative bg-gray-50">
+      <div className="relative hidden lg:flex lg:w-1/2 bg-gray-50">
         {/* Header with back button and join for free */}
-        <div className="absolute top-6 left-6 right-6 flex justify-between items-center z-10">
+        <div className="absolute z-10 flex items-center justify-between top-6 left-6 right-6">
           <button 
             onClick={() => navigate("/")}
-            className="flex items-center text-gray-600 hover:text-gray-900 transition-colors"
+            className="flex items-center text-gray-600 transition-colors hover:text-gray-900"
           >
             <ArrowLeft className="w-4 h-4 mr-1" />
             <span className="text-sm">Back</span>
@@ -77,40 +71,40 @@ export default function Register() {
           <span className="text-sm text-gray-600">Join for free</span>
         </div>
 
-        <div className="flex flex-col justify-center items-center h-full p-12">
+        <div className="flex flex-col items-center justify-center h-full p-12">
           {/* Logo */}
-          <div className="absolute top-6 left-6 flex items-center">
-            <div className="w-6 h-6 bg-black rounded flex items-center justify-center mr-2">
-              <span className="text-white font-bold text-xs">M</span>
+          <div className="absolute flex items-center top-6 left-6">
+            <div className="flex items-center justify-center w-6 h-6 mr-2 bg-black rounded">
+              <span className="text-xs font-bold text-white">M</span>
             </div>
             <span className="font-semibold text-gray-900">Material Bank</span>
           </div>
 
           <div className="max-w-md text-center">
-            <h1 className="text-4xl font-bold text-gray-900 mb-6 leading-tight">
+            <h1 className="mb-6 text-4xl font-bold leading-tight text-gray-900">
               The fastest and most sustainable way to search and sample materials
             </h1>
-            <p className="text-gray-600 mb-8">
+            <p className="mb-8 text-gray-600">
               Hundreds of leading brands. One site. Order by 16:30 CET. 
               Samples tomorrow. Free for architects and interior designers.
             </p>
             
             {/* Material Box Image */}
-            <div className="bg-white rounded-lg shadow-lg p-6 max-w-sm mx-auto">
+            <div className="max-w-sm p-6 mx-auto bg-white rounded-lg shadow-lg">
               <img
                 src="https://cdn.builder.io/api/v1/image/assets%2Fb6d0bc45a36343a4b0569259163dfb47%2Fb8f1b50328d744928c0d060edab0cbd3?format=webp&width=800"
                 alt="Material Bank box with material samples"
-                className="w-full h-auto rounded-lg mb-4"
+                className="w-full h-auto mb-4 rounded-lg"
               />
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
-                  <div className="w-6 h-6 bg-black rounded flex items-center justify-center">
-                    <span className="text-white font-bold text-xs">M</span>
+                  <div className="flex items-center justify-center w-6 h-6 bg-black rounded">
+                    <span className="text-xs font-bold text-white">M</span>
                   </div>
-                  <span className="font-medium text-gray-900 text-sm">Material Bank</span>
+                  <span className="text-sm font-medium text-gray-900">Material Bank</span>
                 </div>
-                <div className="w-6 h-6 bg-gray-200 rounded flex items-center justify-center">
-                  <span className="text-gray-400 text-xs">▶</span>
+                <div className="flex items-center justify-center w-6 h-6 bg-gray-200 rounded">
+                  <span className="text-xs text-gray-400">▶</span>
                 </div>
               </div>
             </div>
@@ -119,13 +113,13 @@ export default function Register() {
       </div>
 
       {/* Right Panel - Register Form */}
-      <div className="flex-1 flex flex-col justify-center px-8 sm:px-12 lg:px-16 xl:px-20">
-        <div className="mx-auto w-full max-w-sm">
+      <div className="flex flex-col justify-center flex-1 px-8 sm:px-12 lg:px-16 xl:px-20">
+        <div className="w-full max-w-sm mx-auto">
           {/* Mobile Header */}
-          <div className="lg:hidden mb-8 flex justify-between items-center">
+          <div className="flex items-center justify-between mb-8 lg:hidden">
             <button 
               onClick={() => navigate("/")}
-              className="flex items-center text-gray-600 hover:text-gray-900 transition-colors"
+              className="flex items-center text-gray-600 transition-colors hover:text-gray-900"
             >
               <ArrowLeft className="w-4 h-4 mr-1" />
               <span className="text-sm">Back</span>
@@ -135,7 +129,7 @@ export default function Register() {
 
           {/* Register Header */}
           <div className="mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">
+            <h2 className="mb-2 text-2xl font-bold text-gray-900">
               Let's get started
             </h2>
             <p className="text-sm text-gray-600">
@@ -146,7 +140,7 @@ export default function Register() {
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-6">
             {error && (
-              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md text-sm">
+              <div className="px-4 py-3 text-sm text-red-700 border border-red-200 rounded-md bg-red-50">
                 {error}
               </div>
             )}
@@ -159,7 +153,7 @@ export default function Register() {
                   type="text"
                   value={signInForm.firstName}
                   onChange={(e) => handleInputChange("firstName", e.target.value)}
-                  className="w-full px-3 py-3 border border-gray-300 rounded-md text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-3 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="First Name"
                   required
                 />
@@ -170,7 +164,7 @@ export default function Register() {
                   type="text"
                   value={signInForm.lastName}
                   onChange={(e) => handleInputChange("lastName", e.target.value)}
-                  className="w-full px-3 py-3 border border-gray-300 rounded-md text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-3 py-3 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="Last Name"
                   required
                 />
@@ -184,7 +178,7 @@ export default function Register() {
                 type="email"
                 value={signInForm.email}
                 onChange={(e) => handleInputChange("email", e.target.value)}
-                className="w-full px-3 py-3 border border-gray-300 rounded-md text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-3 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="Business Email"
                 required
               />
@@ -197,19 +191,19 @@ export default function Register() {
                 type={showPassword ? "text" : "password"}
                 value={signInForm.password}
                 onChange={(e) => handleInputChange("password", e.target.value)}
-                className="w-full px-3 py-3 pr-10 border border-gray-300 rounded-md text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-3 pr-10 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="Password"
                 required
               />
               <button
                 type="button"
-                className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                className="absolute inset-y-0 right-0 flex items-center pr-3"
                 onClick={() => setShowPassword(!showPassword)}
               >
                 {showPassword ? (
-                  <EyeOff className="h-5 w-5 text-gray-400" />
+                  <EyeOff className="w-5 h-5 text-gray-400" />
                 ) : (
-                  <Eye className="h-5 w-5 text-gray-400" />
+                  <Eye className="w-5 h-5 text-gray-400" />
                 )}
               </button>
             </div>
@@ -221,19 +215,19 @@ export default function Register() {
                 type={showConfirmPassword ? "text" : "password"}
                 value={signInForm.confirmPassword}
                 onChange={(e) => handleInputChange("confirmPassword", e.target.value)}
-                className="w-full px-3 py-3 pr-10 border border-gray-300 rounded-md text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-3 pr-10 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="Confirm Your Password"
                 required
               />
               <button
                 type="button"
-                className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                className="absolute inset-y-0 right-0 flex items-center pr-3"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
               >
                 {showConfirmPassword ? (
-                  <EyeOff className="h-5 w-5 text-gray-400" />
+                  <EyeOff className="w-5 h-5 text-gray-400" />
                 ) : (
-                  <Eye className="h-5 w-5 text-gray-400" />
+                  <Eye className="w-5 h-5 text-gray-400" />
                 )}
               </button>
             </div>
@@ -245,7 +239,7 @@ export default function Register() {
                 type="url"
                 value={signInForm.linkedinProfile}
                 onChange={(e) => handleInputChange("linkedinProfile", e.target.value)}
-                className="w-full px-3 py-3 border border-gray-300 rounded-md text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-3 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="LinkedIn / Other Professional Profile Link"
               />
             </div>
@@ -254,11 +248,11 @@ export default function Register() {
             <div className="text-xs text-gray-500">
               <p>
                 By clicking "Join" you agree to{" "}
-                <Link to="/terms" className="text-blue-600 hover:text-blue-500 underline">
+                <Link to="/terms" className="text-blue-600 underline hover:text-blue-500">
                   our Terms of Use
                 </Link>{" "}
                 - and -{" "}
-                <Link to="/privacy" className="text-blue-600 hover:text-blue-500 underline">
+                <Link to="/privacy" className="text-blue-600 underline hover:text-blue-500">
                   Privacy Policy
                 </Link>
                 .
@@ -269,24 +263,24 @@ export default function Register() {
             <Button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-gray-600 hover:bg-gray-700 text-white py-3 rounded-md font-medium transition-colors"
+              className="w-full py-3 font-medium text-white transition-colors bg-gray-600 rounded-md hover:bg-gray-700"
             >
               {isLoading ? "Creating Account..." : "Join"}
             </Button>
 
             {/* Already have account */}
-            <div className="text-center text-sm text-gray-600">
+            <div className="text-sm text-center text-gray-600">
               Already have an account?{" "}
-              <Link to="/signin" className="text-blue-600 hover:text-blue-500 underline">
+              <Link to="/signin" className="text-blue-600 underline hover:text-blue-500">
                 Sign in here
               </Link>
             </div>
 
             {/* Footer Text */}
-            <div className="text-center text-xs text-gray-500 leading-relaxed">
+            <div className="text-xs leading-relaxed text-center text-gray-500">
               Your personal information will be used by Material Bank Europe to create and
               manage your account.{" "}
-              <Link to="/privacy" className="text-blue-600 hover:text-blue-500 underline">
+              <Link to="/privacy" className="text-blue-600 underline hover:text-blue-500">
                 Read more about your data
               </Link>
             </div>

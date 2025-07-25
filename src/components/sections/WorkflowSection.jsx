@@ -1,7 +1,7 @@
 import React from "react";
-import FeatureCard from "../FeatureCard";
-import BrowserWindow from "../BrowserWindow";
-import MockupDialog from "../MockupDialog";
+import FeatureCard from "../X/FeatureCard";
+import BrowserWindow from "../X/BrowserWindow";
+import MockupDialog from "../X/MockupDialog";
 
 export default function WorkflowSection() {
   const communicationFeatures = [

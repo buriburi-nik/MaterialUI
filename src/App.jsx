@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Provider } from "react-redux";
-import { store } from "../client/store";
+import { store } from "../store";
 import Navbar from "@/components/layout/Navbar";
 import Index from "@/pages/Index";
 import SignIn from "@/pages/SignIn";

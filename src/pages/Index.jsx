@@ -4,10 +4,10 @@ import TargetAudience from "@/components/sections/TargetAudience";
 import ScrollingBrands from "@/components/sections/ScrollingBrands";
 import MaterialBankScrolling from "@/components/sections/MaterialBankScrolling";
 import WorkflowSection from "@/components/sections/WorkflowSection";
-import StreamlineDesign from "@/components/StreamlineDesign";
-import Testimonials from "@/components/Testimonials";
-import Registration from "@/components/Registration";
-import Sustainability from "@/components/Sustainability";
+import StreamlineDesign from "@/components/X/StreamlineDesign";
+import Testimonials from "@/components/X/Testimonials";
+import Registration from "@/components/X/Registration";
+import Sustainability from "@/components/X/Sustainability";
 import Footer from "@/components/layout/Footer";
 
 export default function Index() {
