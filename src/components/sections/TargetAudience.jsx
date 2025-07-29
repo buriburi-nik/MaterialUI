@@ -45,7 +45,7 @@ export default function TargetAudience() {
                 </Button>
                 <div className="w-16 h-16 overflow-hidden rounded-full bg-slate-100">
                   <img
-                    src="https://cdn.builder.io/api/v1/image/assets%2Fd3abc8b84bb34537b8335a0239d6fa84%2F3a31c628b8a148a0bda4b5156d6f2403?format=webp&width=800"
+                    src="https://materialbank-eu-cdn.freetls.fastly.net/media/wysiwyg/homepage/For_architects_and_interior_designers.png"
                     alt="Architect working on design"
                     className="object-cover w-full h-full"
                   />

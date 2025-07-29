@@ -8,7 +8,7 @@ export default function Testimonials() {
       quote:
         "Material Bank has evolved into a source of inspiration for my projects. The breadth and depth of products available is incredible.",
       avatar:
-        "https://cdn.builder.io/api/v1/image/assets%2Fb205f0e8ef4e4b3dbb4ae7d5f483e9f6%2Ff970178c98524fdb97d05e75a6606468?format=webp&width=800",
+        "https://materialbank-eu-cdn.freetls.fastly.net/media/wysiwyg/homepage/pics/jessica_havard.jpg",
     },
     {
       name: "Kati Kirby",
@@ -16,7 +16,7 @@ export default function Testimonials() {
       quote:
         "I would be lost without Material Bank. It has improved my efficiency by allowing me to see the quality of materials before specifying.",
       avatar:
-        "https://images.unsplash.com/photo-1494790108755-2616b612b1e0?w=80&h=80&fit=crop&crop=face",
+        "https://materialbank-eu-cdn.freetls.fastly.net/media/wysiwyg/homepage/pics/stephanie_wexler.jpg",
     },
     {
       name: "Jessica Havard",
@@ -24,21 +24,21 @@ export default function Testimonials() {
       quote:
         "From saving time on sample ordering to collaborating with team members, Material Bank has transformed our workflow completely.",
       avatar:
-        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&fit=crop&crop=face",
+        "https://materialbank-eu-cdn.freetls.fastly.net/media/wysiwyg/homepage/pics/kati_kirby.jpg",
     },
   ];
 
   return (
     <section className="w-full py-20 bg-gray-50">
-      <div className="container mx-auto px-4 max-w-6xl">
+      <div className="container max-w-6xl px-4 mx-auto">
         {/* Header */}
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-slate-800 mb-6 leading-tight">
+        <div className="mb-16 text-center">
+          <h2 className="mb-6 text-4xl font-bold leading-tight md:text-5xl text-slate-800">
             See what our members
             <br />
             are saying.
           </h2>
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+          <p className="max-w-2xl mx-auto text-lg text-slate-600">
             Material Bank isn't just a sampling platform — it's a source of
             discovery and connection for a community of over 120,000 designers
             and architects.
@@ -46,40 +46,40 @@ export default function Testimonials() {
         </div>
 
         {/* Testimonials Grid */}
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid gap-8 md:grid-cols-3">
           {testimonials.map((testimonial, index) => (
             <div
               key={index}
-              className="bg-white rounded-xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300"
+              className="p-8 transition-shadow duration-300 bg-white shadow-lg rounded-xl hover:shadow-xl"
             >
               {/* Avatar */}
               <div className="flex justify-center mb-6">
-                <div className="w-16 h-16 rounded-full overflow-hidden bg-gray-200 ring-4 ring-white shadow-lg">
+                <div className="w-16 h-16 overflow-hidden bg-gray-200 rounded-full shadow-lg ring-4 ring-white">
                   <img
                     src={testimonial.avatar}
                     alt={testimonial.name}
-                    className="w-full h-full object-cover"
+                    className="object-cover w-full h-full"
                   />
                 </div>
               </div>
 
               {/* Name and Title */}
-              <div className="text-center mb-6">
-                <h3 className="font-semibold text-slate-800 text-lg">
+              <div className="mb-6 text-center">
+                <h3 className="text-lg font-semibold text-slate-800">
                   {testimonial.name}
                 </h3>
-                <p className="text-slate-500 text-sm">{testimonial.title}</p>
+                <p className="text-sm text-slate-500">{testimonial.title}</p>
               </div>
 
               {/* Quote */}
-              <blockquote className="text-slate-600 text-center italic leading-relaxed">
+              <blockquote className="italic leading-relaxed text-center text-slate-600">
                 "{testimonial.quote}"
               </blockquote>
 
               {/* Decorative quote marks */}
               <div className="flex justify-center mt-4">
-                <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center">
-                  <span className="text-white text-lg font-bold">"</span>
+                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-r from-blue-600 to-purple-600">
+                  <span className="text-lg font-bold text-white">"</span>
                 </div>
               </div>
             </div>
@@ -87,20 +87,20 @@ export default function Testimonials() {
         </div>
 
         {/* Bottom CTA */}
-        <div className="text-center mt-16">
-          <div className="bg-white rounded-2xl p-8 shadow-lg max-w-2xl mx-auto">
-            <h3 className="text-2xl font-bold text-slate-800 mb-4">
+        <div className="mt-16 text-center">
+          <div className="max-w-2xl p-8 mx-auto bg-white shadow-lg rounded-2xl">
+            <h3 className="mb-4 text-2xl font-bold text-slate-800">
               Join thousands of design professionals
             </h3>
-            <p className="text-slate-600 mb-6">
+            <p className="mb-6 text-slate-600">
               Discover why Material Bank is the preferred choice for architects
               and designers worldwide.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="px-8 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-full hover:opacity-90 transition-opacity">
+            <div className="flex flex-col justify-center gap-4 sm:flex-row">
+              <button className="px-8 py-3 font-semibold text-white transition-opacity rounded-full bg-gradient-to-r from-blue-600 to-purple-600 hover:opacity-90">
                 Start Free Today
               </button>
-              <button className="px-8 py-3 border-2 border-slate-300 text-slate-700 font-semibold rounded-full hover:bg-slate-50 transition-colors">
+              <button className="px-8 py-3 font-semibold transition-colors border-2 rounded-full border-slate-300 text-slate-700 hover:bg-slate-50">
                 See More Reviews
               </button>
             </div>

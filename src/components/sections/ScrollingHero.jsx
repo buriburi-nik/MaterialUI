@@ -26,17 +26,17 @@ export default function ScrollingHero() {
   const materialBoxes = [
     {
       image:
-        "https://cdn.builder.io/api/v1/image/assets%2F42130226a8824935b18674a2c8e7630d%2F02df71890dba40cebb968ef29a5628c6?format=webp&width=1600",
+        "https://materialbank-eu-cdn.freetls.fastly.net/media/wysiwyg/homepage/box_blue2.webp",
       bgColor: "#97a2c2",
     },
     {
       image:
-        "https://cdn.builder.io/api/v1/image/assets%2F42130226a8824935b18674a2c8e7630d%2F17b46c8820644311959099048ecc6ddc?format=webp&width=1600",
+        "https://materialbank-eu-cdn.freetls.fastly.net/media/wysiwyg/homepage/box_red2.webp",
       bgColor: "#7f3c36",
     },
     {
       image:
-        "https://cdn.builder.io/api/v1/image/assets%2F42130226a8824935b18674a2c8e7630d%2F18cc02dec18344b6abde9ce40578310d?format=webp&width=1600",
+        "https://materialbank-eu-cdn.freetls.fastly.net/media/wysiwyg/homepage/moss_box2.webp",
       bgColor: "#38a490",
     },
   ];
