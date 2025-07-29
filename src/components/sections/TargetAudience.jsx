@@ -82,23 +82,7 @@ export default function TargetAudience() {
           </Card>
         </div>
 
-        {/* Additional info section */}
-        <div className="mt-12 text-center">
-          <p className="text-sm text-slate-500">
-            Join thousands of professionals already using our platform
-          </p>
-          <div className="flex items-center justify-center gap-8 mt-6 opacity-60">
-            <span className="text-xs text-slate-400">
-              Trusted by leading brands
-            </span>
-            <div className="w-1 h-1 rounded-full bg-slate-300" />
-            <span className="text-xs text-slate-400">
-              Used in 50+ countries
-            </span>
-            <div className="w-1 h-1 rounded-full bg-slate-300" />
-            <span className="text-xs text-slate-400">99.9% uptime SLA</span>
-          </div>
-        </div>
+       
       </div>
     </section>
   );

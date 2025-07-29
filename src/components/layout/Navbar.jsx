@@ -30,11 +30,11 @@ export default function Navbar() {
 
           {/* Desktop Navigation */}
           <div className="items-center flex-1 hidden ml-8 space-x-8 md:flex">
-            <div className="flex items-center space-x-1 cursor-pointer">
-              <span className="text-gray-700 transition-colors hover:text-gray-900">
+            <div className="flex items-center space-x-1 cursor-pointer group">
+              <span className="text-gray-700 transition-colors group-hover:text-gray-900">
                 Products
               </span>
-              <ChevronDown className="w-4 h-4 text-gray-500" />
+              <ChevronDown className="w-4 h-4 text-gray-500 transition-transform group-hover:rotate-180" />
             </div>
             <a href="#brands" className="text-gray-700 transition-colors hover:text-gray-900">
               Brands
