@@ -82,7 +82,7 @@ export default function ScrollingHero() {
 
   return (
     <section
-      className="relative flex flex-col items-center h-[80vh] md:h-[130vh] mx-2 mt-20 overflow-hidden w-90 rounded-2xl"
+      className="relative flex flex-col items-center h-[100vh] md:h-[130vh] mx-2 mt-20 overflow-hidden w-90 rounded-2xl"
 
       style={{ backgroundColor: bgColor }}
     >
