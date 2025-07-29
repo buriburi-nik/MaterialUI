@@ -45,15 +45,32 @@ export default function Navbar() {
 
           {/* Desktop Navigation */}
           <div className="items-center flex-1 hidden ml-8 space-x-8 md:flex">
-            <div className="flex items-center space-x-1 cursor-pointer group">
-              <span className="text-gray-700 transition-colors group-hover:text-gray-900">
-                Products
-              </span>
-              <ChevronDown className="w-4 h-4 text-gray-500 transition-transform group-hover:rotate-180" />
-            </div>
-            <a href="#brands" className="text-gray-700 transition-colors hover:text-gray-900">
-              Brands
-            </a>
+            
+
+            <div className="items-center hidden px-4 py-2 space-x-10 bg-white shadow-sm md:flex rounded-xl">
+  {/* Products dropdown */}
+  <div className="relative flex items-center space-x-1 transition-all cursor-pointer group">
+    <span className="font-medium text-gray-700 transition-colors duration-200 group-hover:text-gray-900">
+      Products
+    </span>
+    <ChevronDown className="w-4 h-4 text-gray-500 transition-transform duration-300 group-hover:rotate-180" />
+    
+    {/* Optional dropdown panel */}
+    <div className="absolute top-full mt-2 hidden group-hover:flex flex-col bg-white border border-gray-200 rounded-md shadow-lg p-3 min-w-[150px] z-10">
+      <a href="#product1" className="px-2 py-1 text-sm text-gray-700 rounded hover:bg-gray-100">Product 1</a>
+      <a href="#product2" className="px-2 py-1 text-sm text-gray-700 rounded hover:bg-gray-100">Product 2</a>
+    </div>
+  </div>
+
+  {/* Brands link */}
+  <a
+    href="#brands"
+    className="font-medium text-gray-700 transition-colors duration-200 hover:text-gray-900 hover:underline"
+  >
+    Brands
+  </a>
+</div>
+
           </div>
 
           {/* Desktop Actions */}

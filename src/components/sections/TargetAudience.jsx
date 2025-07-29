@@ -38,7 +38,7 @@ export default function TargetAudience() {
               <div className="flex items-center justify-between">
                 <Button
                   size="lg"
-                  className="px-8 py-3 bg-white border text-slate-800 border-slate-200 hover:bg-slate-50"
+                  className="z-10 px-6 py-2 font-semibold text-gray-800 transition-all duration-300 bg-white rounded-full shadow-md hover:scale-105 hover:bg-slate-50"
                   onClick={() => navigate("/register")}
                 >
                   Join for free
@@ -66,18 +66,17 @@ export default function TargetAudience() {
               <div className="flex items-center justify-between">
                 <Button
                   size="lg"
-                  className="px-8 py-3 text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:opacity-90"
-                >
+className="z-10 px-6 py-2 font-semibold text-gray-800 transition-all duration-300 bg-white rounded-full shadow-md hover:scale-105 hover:bg-slate-50"                >
                   Become a Brand Partner
                 </Button>
-                <div className="flex items-center justify-center w-16 h-16 overflow-hidden rounded-full bg-gradient-to-br from-orange-300 to-orange-500">
-                  <div className="flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-br from-orange-400 to-orange-600">
-                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br from-orange-500 to-orange-700">
-                      <div className="w-4 h-4 bg-orange-800 rounded-full" />
-                    </div>
-                  </div>
-                </div>
-              </div>
+             <div className="w-16 h-16 overflow-hidden rounded-full bg-slate-100">
+                  <img
+                    src="https://materialbank-eu-cdn.freetls.fastly.net/media/wysiwyg/homepage/For_manufacturers.png"
+                    alt="Architect working on design"
+                    className="object-cover w-full h-full"
+                  />
+                </div>      
+                        </div>
             </CardContent>
           </Card>
         </div>
