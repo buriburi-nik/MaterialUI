@@ -66,40 +66,24 @@ export default function SignIn() {
 
         <div className="flex flex-col items-center justify-center h-full p-12">
           {/* Logo */}
-          <div className="absolute flex items-center top-6 left-6">
-            <div className="flex items-center justify-center w-6 h-6 mr-2 bg-black rounded">
-              <span className="text-xs font-bold text-white">M</span>
-            </div>
-            <span className="font-semibold text-gray-900">Material Bank</span>
-          </div>
+          
 
           <div className="max-w-md text-center">
-            <h1 className="mb-6 text-4xl font-bold leading-tight text-gray-900">
-              The fastest and most sustainable way to search and sample materials
+            <h1 className="mb-6 text-4xl font-bold leading-tight text-gray-900">              The fastest and most sustainable way to search and sample materials
             </h1>
-            <p className="mb-8 text-gray-600">
+            <p className="text-gray-600 ">
               Hundreds of leading brands. One site. Order by 16:30 CET. 
               Samples tomorrow. Free for architects and interior designers.
             </p>
             
             {/* Material Box Image */}
-            <div className="max-w-sm p-6 mx-auto bg-white rounded-lg shadow-lg">
+            <div className="max-w-sm ">
               <img
-                src="https://cdn.builder.io/api/v1/image/assets%2Fb6d0bc45a36343a4b0569259163dfb47%2Fe3e6e70c4b41432ba596d07899ebe3b6?format=webp&width=800"
+                src="https://www.materialbank.eu/static/version1753374402/frontend/MaterialBank/mb-eu/en_US/Magento_Customer/images/register_background.png"
                 alt="Material Bank box with material samples"
                 className="w-full h-auto mb-4 rounded-lg"
               />
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <div className="flex items-center justify-center w-6 h-6 bg-black rounded">
-                    <span className="text-xs font-bold text-white">M</span>
-                  </div>
-                  <span className="text-sm font-medium text-gray-900">Material Bank</span>
-                </div>
-                <div className="flex items-center justify-center w-6 h-6 bg-gray-200 rounded">
-                  <span className="text-xs text-gray-400">▶</span>
-                </div>
-              </div>
+              
             </div>
           </div>
         </div>

@@ -36,7 +36,11 @@ export default function Index() {
       <WorkflowSection />
 
       {/* Streamline Design Section */}
+            <div className="hidden md:block">
+
       <StreamlineDesign />
+
+      </div>
 
       {/* Testimonials Section */}
       <Testimonials />
