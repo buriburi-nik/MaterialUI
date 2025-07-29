@@ -99,7 +99,7 @@ export default function ScrollingHero() {
         <div className="flex flex-col justify-center gap-4 mb-8 sm:flex-row">
           <button
              onClick={() => navigate("/register")}
-            className="px-6 py-2 font-semibold text-gray-800 transition-all duration-300 bg-white rounded-full shadow-md hover:scale-105"
+            className="z-10 px-6 py-2 font-semibold text-gray-800 transition-all duration-300 bg-white rounded-full shadow-md hover:scale-105"
           >
             Join for free
           </button>

@@ -5,7 +5,7 @@ export default function Registration() {
   const navigate = useNavigate();
 
   return (
-    <section className="relative px-4 py-16 mx-2 mt-20 overflow-hidden rounded-2xl bg-gradient-to-br from-teal-500 to-teal-600">
+    <section className="relative px-4 py-16 mx-2 mt-5 overflow-hidden rounded-2xl bg-gradient-to-br from-teal-500 to-teal-600">
       <div className="flex flex-col-reverse items-center max-w-6xl gap-12 mx-auto lg:grid lg:grid-cols-2 lg:items-center">
 
         {/* Left Content */}
