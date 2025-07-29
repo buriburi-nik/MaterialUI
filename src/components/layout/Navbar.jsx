@@ -43,15 +43,15 @@ export default function Navbar() {
 
           {/* Desktop Actions */}
           <div className="items-center hidden ml-auto space-x-4 md:flex">
-            <Button variant="ghost" size="sm" className="text-gray-700">
+            <Button variant="ghost" size="sm" className="text-gray-700 rounded-full shadow-md hover:scale-105">
               <Globe className="w-4 h-4" />
             </Button>
-            <Button variant="ghost" size="sm" className="text-gray-700" onClick={() => navigate("/signin")}>
+            <Button variant="ghost" size="sm" className="text-gray-700 rounded-full shadow-md hover:scale-105" onClick={() => navigate("/signin")}>
               Sign In
             </Button>
             <Button
               size="sm"
-              className="px-4 py-2 text-white bg-black rounded hover:bg-gray-800"
+              className="px-4 py-2 text-white transition-colors bg-black rounded-full shadow-md hover:bg-gray-800"
               onClick={() => navigate("/register")}
             >
               Join for free
@@ -118,6 +118,7 @@ export default function Navbar() {
                   <Globe className="w-4 h-4 mr-3" />
                   Language
                 </Button>
+
 
                 <Button
                   variant="ghost"

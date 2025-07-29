@@ -105,7 +105,8 @@ export default function Footer() {
             </p>
             <button
               onClick={handleJoinUs}
-              className="w-full px-4 py-2 text-sm font-medium text-white transition-colors bg-gray-700 rounded-md hover:bg-gray-800 active:bg-gray-900 sm:w-auto"
+               className="px-4 py-2 text-white transition-colors bg-black rounded-full shadow-md hover:bg-gray-800"
+             
             >
               Join Us
             </button>
@@ -122,11 +123,13 @@ export default function Footer() {
             who are specifying materials for their projects.
           </p>
           <button
-            onClick={handleJoinUs}
-            className="w-full px-4 py-3 text-sm font-medium text-white transition-colors bg-gray-700 rounded-md hover:bg-gray-800 active:bg-gray-900 sm:w-auto sm:py-2"
-          >
-            Join Us
-          </button>
+  onClick={handleJoinUs}
+   className="px-4 py-2 text-white transition-colors bg-black rounded-full shadow-md hover:bg-gray-800"
+             
+>
+  Join Us
+</button>
+
         </div>
 
         {/* Bottom Section - Stack on mobile */}
