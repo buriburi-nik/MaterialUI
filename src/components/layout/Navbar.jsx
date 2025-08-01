@@ -396,7 +396,14 @@ export default function Navbar() {
               {/* Products dropdown */}
               <div
                 className="flex items-center justify-between px-3 py-3 transition-colors rounded-md cursor-pointer hover:bg-gray-50"
-                onClick={isAuthenticated ? null : () => showAuthToast("Sign in to explore our product catalog")}
+                onClick={() => {
+                  if (isAuthenticated) {
+                    setIsMobileMenuOpen(false);
+                    navigate("/products");
+                  } else {
+                    showAuthToast("Sign in to explore our product catalog");
+                  }
+                }}
               >
                 <span className="font-medium text-gray-700">Products</span>
                 <ChevronDown className="w-4 h-4 text-gray-500" />
