@@ -41,7 +41,7 @@ export default function SignIn() {
       }));
       
       dispatch(clearSignInForm());
-      navigate("/");
+      navigate("/dashboard");
     } catch (err) {
       dispatch(setError("Failed to sign in. Please try again."));
       dispatch(setLoading(false));

@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { useAuthCheck } from "@/hooks/useAuthCheck";
 
 export default function ScrollingBrands() {
   const [scrollY, setScrollY] = useState(0);
+  const { requireAuth } = useAuthCheck();
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
@@ -69,10 +71,11 @@ export default function ScrollingBrands() {
                 {extendedBrands.map((brand, index) => (
                   <div
                     key={`row${rowIndex}-${index}`}
-                    className="flex-shrink-0 px-6 py-3 text-sm font-medium transition-colors duration-300 rounded-full bg-slate-200/80 hover:bg-slate-300/80 text-slate-700 whitespace-nowrap"
+                    className="flex-shrink-0 px-6 py-3 text-sm font-medium transition-colors duration-300 rounded-full bg-slate-200/80 hover:bg-slate-300/80 text-slate-700 whitespace-nowrap cursor-pointer"
                     style={{
                       transform: `translateY(${Math.sin(scrollY * 0.02 + index * 0.3 + rowIndex * 2) * 8}px)`,
                     }}
+                    onClick={requireAuth(null, `Sign in to explore ${brand} materials`)}
                   >
                     {brand}
                   </div>
