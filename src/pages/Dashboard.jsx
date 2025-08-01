@@ -241,7 +241,7 @@ export default function Dashboard() {
                       <br />
                       personalized experience.
                     </p>
-                    <button className="inline-flex items-center gap-2 text-sm text-gray-600 transition-colors hover:text-gray-800">
+                    <button className="inline-flex items-center gap-2 px-6 py-3 text-sm text-gray-600 transition-colors rounded-full shadow-md hover:text-gray-80 hover:scale-105 bg-slate-100">
                       <Plus className="w-4 h-4" />
                       Create a new project
                     </button>
@@ -261,7 +261,7 @@ export default function Dashboard() {
                       {!isMobile && <br />}
                       Design starts here.™
                     </p>
-                    <button className="inline-flex items-center gap-2 text-sm text-gray-600 transition-colors hover:text-gray-800">
+                    <button className="inline-flex items-center gap-2 px-6 py-3 text-sm text-gray-600 transition-colors rounded-full shadow-md hover:text-gray-80 hover:scale-105 bg-slate-100">
                       <Plus className="w-4 h-4" />
                       Create a new board
                     </button>
