@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { useAuth } from '@/hooks/useAuth';
 import {
   Filter,
@@ -15,12 +16,20 @@ import {
   Menu,
   X,
   Plus,
+  Loader2,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useToast } from '@/contexts/ToastContext';
+import { addItem } from '../../store/slices/cartSlice';
+import { setGlobalSearchQuery, setSearchResults, setSearching } from '../../store/slices/searchSlice';
+import { useDebounce } from '@/hooks/useDebounce';
+import ProductDetailModal from '@/components/ui/ProductDetailModal';
 import productsData from '@/data/products.json';
 
 const Products = () => {
   const { user, userProfile } = useAuth();
+  const dispatch = useDispatch();
+  const { showToast } = useToast();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [selectedFilters, setSelectedFilters] = useState({
@@ -45,11 +54,16 @@ const Products = () => {
     socialEquityImpact: 'all'
   });
   const [currentPage, setCurrentPage] = useState(1);
-  const [searchQuery, setSearchQuery] = useState('');
+  const { globalSearchQuery, isSearching } = useSelector(state => state.search);
+  const debouncedSearchQuery = useDebounce(globalSearchQuery, 300);
   const [searchFilter, setSearchFilter] = useState('');
   const [expandedSections, setExpandedSections] = useState({});
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [itemsPerPage] = useState(12);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [isProductModalOpen, setIsProductModalOpen] = useState(false);
+  const [isFiltersCollapsed, setIsFiltersCollapsed] = useState(false);
+  const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
 
   const sidebarItems = [
     {
@@ -195,11 +209,11 @@ const Products = () => {
     );
 
     // Filter by search query
-    if (searchQuery.trim()) {
+    if (debouncedSearchQuery.trim()) {
       filtered = filtered.filter(product =>
-        product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        product.brandName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        product.brand.toLowerCase().includes(searchQuery.toLowerCase())
+        product.name.toLowerCase().includes(debouncedSearchQuery.toLowerCase()) ||
+        product.brandName.toLowerCase().includes(debouncedSearchQuery.toLowerCase()) ||
+        product.brand.toLowerCase().includes(debouncedSearchQuery.toLowerCase())
       );
     }
 
@@ -218,9 +232,25 @@ const Products = () => {
 
   // Update filtered products when filters change
   useEffect(() => {
-    setFilteredProducts(filterProducts());
-    setCurrentPage(1); // Reset to first page when filters change
-  }, [selectedFilters, searchQuery, searchFilter]);
+    // Start searching indicator
+    if (globalSearchQuery !== debouncedSearchQuery) {
+      dispatch(setSearching(true));
+    } else {
+      // Search is complete
+      const results = filterProducts();
+      setFilteredProducts(results);
+      setCurrentPage(1);
+      dispatch(setSearchResults(results.length));
+      dispatch(setSearching(false));
+    }
+  }, [selectedFilters, debouncedSearchQuery, searchFilter]);
+
+  // Handle immediate search feedback
+  useEffect(() => {
+    if (globalSearchQuery.length > 0) {
+      dispatch(setSearching(true));
+    }
+  }, [globalSearchQuery]);
 
   // Initialize filtered products
   useEffect(() => {
@@ -247,6 +277,23 @@ const Products = () => {
     }));
   };
 
+  // Handle add to cart
+  const handleAddToCart = (product) => {
+    dispatch(addItem(product));
+    showToast(`${product.name} added to cart`, 'success');
+  };
+
+  // Handle product detail view
+  const handleProductClick = (product) => {
+    setSelectedProduct(product);
+    setIsProductModalOpen(true);
+  };
+
+  const closeProductModal = () => {
+    setIsProductModalOpen(false);
+    setSelectedProduct(null);
+  };
+
   // Handle array filter toggle (for multi-select filters)
   const toggleArrayFilter = (filterType, value) => {
     setSelectedFilters(prev => {
@@ -262,7 +309,7 @@ const Products = () => {
   };
 
   return (
-    <div className="flex flex-col h-screen overflow-hidden bg-gray-50">
+    <div className="flex flex-col h-screen mt-20 overflow-hidden bg-gray-50 md:mt-0">
       <div className="flex flex-1 h-0 overflow-hidden lg:pt-16">
         {/* Dashboard Sidebar */}
         {isMobile ? (
@@ -377,9 +424,10 @@ const Products = () => {
 
         {/* Main Content with Filters and Products */}
         <div className="flex flex-1 overflow-hidden">
-          {/* Filters Sidebar */}
-          <div className="w-64 overflow-y-auto bg-white border-r border-gray-200">
-            <div className="p-4">
+          {/* Filters Sidebar - Hidden on mobile, shown as modal */}
+          <div className={`${isFiltersCollapsed ? 'w-0' : 'w-64'} transition-all duration-300 overflow-hidden bg-white border-r border-gray-200 hidden lg:block`}>
+            <div className="w-64 overflow-y-auto scrollbar-hide">
+              <div className="p-4">
               {/* Filters Header */}
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
@@ -483,7 +531,7 @@ const Products = () => {
                       <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${expandedSections.Brand ? 'rotate-180' : ''}`} />
                     </button>
                     {expandedSections.Brand && (
-                      <div className="mt-2 space-y-2 overflow-y-auto max-h-40">
+                      <div className="mt-2 space-y-2 overflow-y-auto scrollbar-hide max-h-40">
                         {getUniqueValues('brandName').map(brand => (
                           <label key={brand} className="flex items-center space-x-2 cursor-pointer">
                             <input
@@ -547,7 +595,7 @@ const Products = () => {
                       <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${expandedSections.Color ? 'rotate-180' : ''}`} />
                     </button>
                     {expandedSections.Color && (
-                      <div className="mt-2 space-y-2 overflow-y-auto max-h-40">
+                      <div className="mt-2 space-y-2 overflow-y-auto scrollbar-hide max-h-40">
                         {getUniqueValues('colors').map(color => (
                           <label key={color} className="flex items-center space-x-2 cursor-pointer">
                             <input
@@ -573,7 +621,7 @@ const Products = () => {
                       <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${expandedSections['Country of Origin'] ? 'rotate-180' : ''}`} />
                     </button>
                     {expandedSections['Country of Origin'] && (
-                      <div className="mt-2 space-y-2 overflow-y-auto max-h-40">
+                      <div className="mt-2 space-y-2 overflow-y-auto scrollbar-hide max-h-40">
                         {getUniqueValues('country').map(country => (
                           <label key={country} className="flex items-center space-x-2 cursor-pointer">
                             <input
@@ -599,7 +647,7 @@ const Products = () => {
                       <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${expandedSections.Pattern ? 'rotate-180' : ''}`} />
                     </button>
                     {expandedSections.Pattern && (
-                      <div className="mt-2 space-y-2 overflow-y-auto max-h-40">
+                      <div className="mt-2 space-y-2 overflow-y-auto scrollbar-hide max-h-40">
                         {getUniqueValues('pattern').map(pattern => (
                           <label key={pattern} className="flex items-center space-x-2 cursor-pointer">
                             <input
@@ -625,7 +673,7 @@ const Products = () => {
                       <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${expandedSections.Features ? 'rotate-180' : ''}`} />
                     </button>
                     {expandedSections.Features && (
-                      <div className="mt-2 space-y-2 overflow-y-auto max-h-40">
+                      <div className="mt-2 space-y-2 overflow-y-auto scrollbar-hide max-h-40">
                         {getUniqueValues('features').map(feature => (
                           <label key={feature} className="flex items-center space-x-2 cursor-pointer">
                             <input
@@ -651,7 +699,7 @@ const Products = () => {
                       <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${expandedSections.Application ? 'rotate-180' : ''}`} />
                     </button>
                     {expandedSections.Application && (
-                      <div className="mt-2 space-y-2 overflow-y-auto max-h-40">
+                      <div className="mt-2 space-y-2 overflow-y-auto scrollbar-hide max-h-40">
                         {getUniqueValues('application').map(application => (
                           <label key={application} className="flex items-center space-x-2 cursor-pointer">
                             <input
@@ -687,26 +735,130 @@ const Products = () => {
                 </div>
               </div>
             </div>
+            </div>
           </div>
 
           {/* Products Content */}
-          <div className="flex-1 p-6 overflow-y-auto">
-            {/* Category Tabs */}
-            <div className="flex items-center gap-4 mb-6 border-b border-gray-200">
+          <div className="flex-1 p-3 lg:p-6 overflow-y-auto scrollbar-hide">
+            {/* Filter Toggle Button */}
+            <div className="flex items-center gap-3 mb-4">
+              <button
+                onClick={() => {
+                  // On mobile, open modal. On desktop, toggle sidebar
+                  if (window.innerWidth < 1024) {
+                    setIsMobileFiltersOpen(true);
+                  } else {
+                    setIsFiltersCollapsed(!isFiltersCollapsed);
+                  }
+                }}
+                className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 hover:text-gray-900 transition-colors shadow-sm"
+              >
+                <Filter className="w-4 h-4" />
+                <span className="hidden sm:inline">{isFiltersCollapsed ? 'Show Filters' : 'Hide Filters'}</span>
+                <span className="sm:hidden">Filters</span>
+              </button>
+              <span className="text-sm text-gray-500 flex items-center gap-2">
+                {isSearching ? (
+                  <>
+                    <Loader2 className="w-3 h-3 animate-spin" />
+                    Searching...
+                  </>
+                ) : (
+                  `${filteredProducts.length} products found`
+                )}
+              </span>
+            </div>
+
+            {/* Category Tabs - Horizontal scroll on mobile */}
+            <div className="flex items-center gap-2 lg:gap-4 mb-6 border-b border-gray-200 overflow-x-auto scrollbar-hide">
               {categories.map((category) => {
-                const count = products.filter(p => category.name === 'All' ? true : p.category === category.name).length;
+                // Calculate count based on current filters (excluding category filter)
+                const tempFilters = { ...selectedFilters, category: category.name };
+                let filtered = products;
+
+                // Apply all filters except category to get the base filtered set
+                // Filter by commercial/residential
+                if (selectedFilters.commercial && !selectedFilters.residential) {
+                  filtered = filtered.filter(product => product.commercial);
+                } else if (selectedFilters.residential && !selectedFilters.commercial) {
+                  filtered = filtered.filter(product => product.residential);
+                }
+
+                // Filter by brands
+                if (selectedFilters.brands.length > 0) {
+                  filtered = filtered.filter(product => selectedFilters.brands.includes(product.brandName));
+                }
+
+                // Filter by colors
+                if (selectedFilters.colors.length > 0) {
+                  filtered = filtered.filter(product =>
+                    product.colors.some(color => selectedFilters.colors.includes(color))
+                  );
+                }
+
+                // Filter by countries
+                if (selectedFilters.countries.length > 0) {
+                  filtered = filtered.filter(product => selectedFilters.countries.includes(product.country));
+                }
+
+                // Filter by patterns
+                if (selectedFilters.patterns.length > 0) {
+                  filtered = filtered.filter(product => selectedFilters.patterns.includes(product.pattern));
+                }
+
+                // Filter by features
+                if (selectedFilters.features.length > 0) {
+                  filtered = filtered.filter(product =>
+                    product.features.some(feature => selectedFilters.features.includes(feature))
+                  );
+                }
+
+                // Filter by applications
+                if (selectedFilters.applications.length > 0) {
+                  filtered = filtered.filter(product => selectedFilters.applications.includes(product.application));
+                }
+
+                // Filter by price range
+                filtered = filtered.filter(product =>
+                  product.price >= selectedFilters.priceRange.min &&
+                  product.price <= selectedFilters.priceRange.max
+                );
+
+                // Filter by search query
+                if (debouncedSearchQuery.trim()) {
+                  filtered = filtered.filter(product =>
+                    product.name.toLowerCase().includes(debouncedSearchQuery.toLowerCase()) ||
+                    product.brandName.toLowerCase().includes(debouncedSearchQuery.toLowerCase()) ||
+                    product.brand.toLowerCase().includes(debouncedSearchQuery.toLowerCase())
+                  );
+                }
+
+                // Filter by search filter
+                if (searchFilter.trim()) {
+                  filtered = filtered.filter(product =>
+                    product.name.toLowerCase().includes(searchFilter.toLowerCase()) ||
+                    product.brandName.toLowerCase().includes(searchFilter.toLowerCase()) ||
+                    product.colors.some(color => color.toLowerCase().includes(searchFilter.toLowerCase())) ||
+                    product.features.some(feature => feature.toLowerCase().includes(searchFilter.toLowerCase()))
+                  );
+                }
+
+                // Now apply category filter to get final count
+                const count = category.name === 'All'
+                  ? filtered.length
+                  : filtered.filter(p => p.category === category.name).length;
                 return (
                   <button
                     key={category.name}
                     onClick={() => handleCategoryChange(category.name)}
-                    className={`flex items-center gap-2 px-4 py-2 border-b-2 transition-colors ${
+                    className={`flex items-center gap-1 lg:gap-2 px-2 lg:px-4 py-2 border-b-2 transition-colors whitespace-nowrap ${
                       selectedFilters.category === category.name
                         ? 'border-blue-600 text-blue-600'
                         : 'border-transparent text-gray-600 hover:text-gray-900'
                     }`}
                   >
-                    <span>{category.name}</span>
-                    <span className="px-2 py-1 text-xs text-white bg-gray-900 rounded">
+                    <span className="text-sm lg:text-base">{category.name}</span>
+                    <span className="px-1.5 lg:px-2 py-0.5 lg:py-1 text-xs text-white bg-gray-900 rounded">
                       {count}
                     </span>
                   </button>
@@ -718,54 +870,63 @@ const Products = () => {
             </div>
 
             {/* Top Bar */}
-            <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center gap-4">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 lg:gap-4">
                 <div className="relative">
                   <Search className="absolute w-4 h-4 text-gray-400 transform -translate-y-1/2 left-3 top-1/2" />
                   <input
                     type="text"
                     placeholder="Search products..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-64 py-2 pl-10 pr-4 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    value={globalSearchQuery}
+                    onChange={(e) => dispatch(setGlobalSearchQuery(e.target.value))}
+                    className="w-full sm:w-64 py-2 pl-10 pr-4 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="hidden sm:flex items-center gap-2">
                   <Grid className="w-5 h-5 text-gray-400" />
                 </div>
-                <div className="w-6 h-6 rounded-full bg-gradient-to-r from-red-400 via-yellow-400 to-blue-400"></div>
-                <button className="text-sm text-gray-600 hover:text-gray-900">Compare</button>
+                <div className="hidden sm:block w-6 h-6 rounded-full bg-gradient-to-r from-red-400 via-yellow-400 to-blue-400"></div>
+                <button className="hidden sm:block text-sm text-gray-600 hover:text-gray-900">Compare</button>
               </div>
-              <div className="text-sm text-gray-600">
-                {filteredProducts.length} products found
+              <div className="text-xs lg:text-sm text-gray-600 text-center lg:text-right">
+                Showing {Math.min((currentPage - 1) * itemsPerPage + 1, filteredProducts.length)} to {Math.min(currentPage * itemsPerPage, filteredProducts.length)} of {filteredProducts.length} products
               </div>
             </div>
 
             {/* Products Grid */}
-            <div className="grid grid-cols-1 gap-6 mb-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <div className="grid grid-cols-2 gap-3 mb-8 sm:gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 lg:gap-6">
               {getCurrentPageProducts().length > 0 ? (
                 getCurrentPageProducts().map((product) => (
                   <div key={product.id} className="overflow-hidden transition-shadow bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md">
-                    <div className="bg-gray-100 aspect-square">
+                    <div
+                      className="bg-gray-100 aspect-square cursor-pointer"
+                      onClick={() => handleProductClick(product)}
+                    >
                       <img
-                        src={product.image}
+                        src={product.image || `https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=400&fit=crop&seed=${product.id}`}
                         alt={product.name}
-                        className="object-cover w-full h-full"
+                        className="object-cover w-full h-full hover:scale-105 transition-transform duration-200"
+                        onError={(e) => {
+                          e.target.src = '/public/placeholder.svg';
+                        }}
                       />
                     </div>
-                    <div className="p-4">
+                    <div className="p-2 lg:p-4">
                       <div className="mb-1 text-xs tracking-wide text-gray-500 uppercase">
                         {product.brand}
                       </div>
-                      <h3 className="mb-2 text-sm font-medium text-gray-900">
+                      <h3
+                        className="mb-1 lg:mb-2 text-xs lg:text-sm font-medium text-gray-900 cursor-pointer hover:text-blue-600 leading-tight"
+                        onClick={() => handleProductClick(product)}
+                      >
                         {product.name}
                       </h3>
-                      <div className="mb-2 text-xs text-gray-600">
+                      <div className="mb-1 lg:mb-2 text-xs font-semibold text-gray-900">
                         ${product.price}
                       </div>
-                      <div className="flex flex-wrap gap-1 mb-3">
+                      <div className="flex flex-wrap gap-1 mb-2 lg:mb-3">
                         {product.colors.slice(0, 2).map(color => (
-                          <span key={color} className="px-2 py-1 text-xs text-gray-600 bg-gray-100 rounded">
+                          <span key={color} className="px-1.5 py-0.5 text-xs text-gray-600 bg-gray-100 rounded">
                             {color}
                           </span>
                         ))}
@@ -773,9 +934,11 @@ const Products = () => {
                       <Button
                         variant={product.hasButton ? "default" : "outline"}
                         size="sm"
-                        className="w-full text-xs"
+                        className="w-full text-xs h-8 lg:h-9"
+                        onClick={() => handleAddToCart(product)}
                       >
-                        {product.buttonText}
+                        <span className="sm:hidden">Add</span>
+                        <span className="hidden sm:inline">{product.buttonText}</span>
                       </Button>
                     </div>
                   </div>
@@ -857,6 +1020,170 @@ const Products = () => {
           </div>
         </div>
       </div>
+
+      {/* Product Detail Modal */}
+      <ProductDetailModal
+        product={selectedProduct}
+        isOpen={isProductModalOpen}
+        onClose={closeProductModal}
+      />
+
+      {/* Mobile Filters Modal */}
+      {isMobileFiltersOpen && (
+        <div className="fixed inset-0 z-50 lg:hidden">
+          {/* Backdrop */}
+          <div
+            className="fixed inset-0 bg-black bg-opacity-50"
+            onClick={() => setIsMobileFiltersOpen(false)}
+          />
+
+          {/* Modal */}
+          <div className="fixed inset-x-0 bottom-0 z-50 bg-white rounded-t-xl shadow-xl max-h-[80vh] overflow-hidden">
+            {/* Header */}
+            <div className="flex items-center justify-between p-4 border-b border-gray-200">
+              <h2 className="text-lg font-semibold text-gray-900">Filters</h2>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => {
+                    setSelectedFilters({
+                      category: 'All',
+                      commercial: false,
+                      residential: false,
+                      allColorways: false,
+                      brands: [],
+                      priceRange: { min: 0, max: 1000 },
+                      colors: [],
+                      countries: [],
+                      availability: 'all',
+                      patterns: [],
+                      metallicFinish: false,
+                      features: [],
+                      applications: [],
+                      content: [],
+                      flammability: 'all',
+                      abrasion: 'all',
+                      climateImpact: 'all',
+                      humanHealthImpact: 'all',
+                      socialEquityImpact: 'all'
+                    });
+                    setSearchFilter('');
+                  }}
+                  className="text-sm text-blue-600 hover:text-blue-800"
+                >
+                  Clear all
+                </button>
+                <button
+                  onClick={() => setIsMobileFiltersOpen(false)}
+                  className="p-1 text-gray-400 hover:text-gray-600"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+
+            {/* Filters Content - Same as desktop but in mobile modal */}
+            <div className="p-4 overflow-y-auto scrollbar-hide max-h-[calc(80vh-80px)]">
+              {/* Search Filters */}
+              <div className="mb-4">
+                <div className="relative">
+                  <Search className="absolute w-4 h-4 text-gray-400 transform -translate-y-1/2 left-3 top-1/2" />
+                  <input
+                    type="text"
+                    placeholder="Search filters"
+                    value={searchFilter}
+                    onChange={(e) => setSearchFilter(e.target.value)}
+                    className="w-full py-2 pl-10 pr-4 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+              </div>
+
+              {/* Filter Categories - Simplified for mobile */}
+              <div className="space-y-4">
+                {/* Commercial/Residential */}
+                <div className="space-y-3">
+                  <h3 className="font-medium text-gray-900">Type</h3>
+                  <div className="space-y-2">
+                    <label className="flex items-center space-x-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={selectedFilters.commercial}
+                        onChange={(e) => toggleFilter('commercial', e.target.checked)}
+                        className="text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                      />
+                      <span className="text-sm text-gray-700">Commercial</span>
+                    </label>
+                    <label className="flex items-center space-x-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={selectedFilters.residential}
+                        onChange={(e) => toggleFilter('residential', e.target.checked)}
+                        className="text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                      />
+                      <span className="text-sm text-gray-700">Residential</span>
+                    </label>
+                  </div>
+                </div>
+
+                {/* Quick Filters - Most used ones */}
+                <div className="space-y-3">
+                  <h3 className="font-medium text-gray-900">Quick Filters</h3>
+                  <div className="grid grid-cols-2 gap-2">
+                    {getUniqueValues('brandName').slice(0, 6).map(brand => (
+                      <label key={brand} className="flex items-center space-x-2 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={selectedFilters.brands.includes(brand)}
+                          onChange={() => toggleArrayFilter('brands', brand)}
+                          className="text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                        />
+                        <span className="text-xs text-gray-600">{brand}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Price Range */}
+                <div className="space-y-3">
+                  <h3 className="font-medium text-gray-900">Price Range</h3>
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="number"
+                      placeholder="Min"
+                      value={selectedFilters.priceRange.min}
+                      onChange={(e) => setSelectedFilters(prev => ({
+                        ...prev,
+                        priceRange: { ...prev.priceRange, min: Number(e.target.value) || 0 }
+                      }))}
+                      className="w-full px-2 py-1 text-sm border border-gray-300 rounded"
+                    />
+                    <span className="text-sm text-gray-500">to</span>
+                    <input
+                      type="number"
+                      placeholder="Max"
+                      value={selectedFilters.priceRange.max}
+                      onChange={(e) => setSelectedFilters(prev => ({
+                        ...prev,
+                        priceRange: { ...prev.priceRange, max: Number(e.target.value) || 1000 }
+                      }))}
+                      className="w-full px-2 py-1 text-sm border border-gray-300 rounded"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="p-4 border-t border-gray-200">
+              <button
+                onClick={() => setIsMobileFiltersOpen(false)}
+                className="w-full px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors"
+              >
+                Apply Filters ({filteredProducts.length} products)
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

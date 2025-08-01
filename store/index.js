@@ -3,6 +3,8 @@ import uiReducer from "./slices/uiSlice";
 import scrollReducer from "./slices/scrollSlice";
 import materialsReducer from "./slices/materialsSlice";
 import authReducer from "./slices/authSlice";
+import cartReducer from "./slices/cartSlice";
+import searchReducer from "./slices/searchSlice";
 import {
   authListenerMiddleware,
   authTokenMiddleware,
@@ -15,6 +17,8 @@ export const store = configureStore({
     scroll: scrollReducer,
     materials: materialsReducer,
     auth: authReducer,
+    cart: cartReducer,
+    search: searchReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

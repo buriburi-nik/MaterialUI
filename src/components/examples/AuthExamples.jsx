@@ -2,7 +2,7 @@ import React from 'react';
 import { useAuth, useAuthProtection, useUserPermissions } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/Badge';
+import Badge from '@/components/ui/Badge';
 import AuthGuard, { AuthenticatedOnly, UnauthenticatedOnly, AdminOnly, PremiumOnly } from '../auth/AuthGuard';
 import { Lock, Crown, ShieldCheck, Download, Save, Users } from 'lucide-react';
 

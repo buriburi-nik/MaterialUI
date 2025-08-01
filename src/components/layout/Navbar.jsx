@@ -2,14 +2,15 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Globe, ChevronDown, Search, ShoppingCart } from "lucide-react";
+import { Menu, X, Globe, ChevronDown, Search, ShoppingCart, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth, useAuthProtection } from "@/hooks/useAuth";
 import { useToast } from "@/contexts/ToastContext";
+import { openCart } from "../../../store/slices/cartSlice";
+import { setGlobalSearchQuery } from "../../../store/slices/searchSlice";
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
   const [isProductsDropdownOpen, setIsProductsDropdownOpen] = useState(false);
   const navigate = useNavigate();
@@ -17,6 +18,8 @@ export default function Navbar() {
   const { isAuthenticated, user, userProfile, logout } = useAuth();
   const { requireAuth } = useAuthProtection();
   const { showAuthToast } = useToast();
+  const { totalQuantity } = useSelector(state => state.cart);
+  const { globalSearchQuery, isSearching } = useSelector(state => state.search);
 
   const handleSignOut = () => {
     logout({ showSuccessToast: true });
@@ -202,12 +205,27 @@ export default function Navbar() {
             {isAuthenticated && (
               <div className="flex-1 max-w-lg mx-8">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  {isSearching ? (
+                    <Loader2 className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-blue-500 animate-spin" />
+                  ) : (
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  )}
                   <input
                     type="text"
                     placeholder="Search materials, products, brands..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
+                    value={globalSearchQuery}
+                    onChange={(e) => {
+                      dispatch(setGlobalSearchQuery(e.target.value));
+                      // Navigate to products page if not already there and there's a search query
+                      if (e.target.value && window.location.pathname !== '/products') {
+                        navigate('/products');
+                      }
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && globalSearchQuery.trim()) {
+                        navigate('/products');
+                      }
+                    }}
                     className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                   />
                 </div>
@@ -265,9 +283,17 @@ export default function Navbar() {
                 </div>
 
                 {/* Shopping Cart */}
-                <Button variant="ghost" size="sm" className="text-gray-700 rounded-full shadow-md hover:scale-105">
+                <button
+                  onClick={() => dispatch(openCart())}
+                  className="relative p-2 text-gray-700 rounded-full shadow-md hover:scale-105 hover:bg-gray-50 transition-all"
+                >
                   <ShoppingCart className="w-4 h-4" />
-                </Button>
+                  {totalQuantity > 0 && (
+                    <span className="absolute -top-1 -right-1 w-5 h-5 bg-blue-600 text-white text-xs rounded-full flex items-center justify-center font-medium">
+                      {totalQuantity}
+                    </span>
+                  )}
+                </button>
               </>
             ) : (
               /* Unauthenticated state */
@@ -322,12 +348,29 @@ export default function Navbar() {
               {isAuthenticated && (
                 <div className="mb-4">
                   <div className="relative">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                    {isSearching ? (
+                      <Loader2 className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-blue-500 animate-spin" />
+                    ) : (
+                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                    )}
                     <input
                       type="text"
                       placeholder="Search materials, products, brands..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
+                      value={globalSearchQuery}
+                      onChange={(e) => {
+                        dispatch(setGlobalSearchQuery(e.target.value));
+                        // Navigate to products page if not already there and there's a search query
+                        if (e.target.value && window.location.pathname !== '/products') {
+                          setIsMobileMenuOpen(false);
+                          navigate('/products');
+                        }
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' && globalSearchQuery.trim()) {
+                          setIsMobileMenuOpen(false);
+                          navigate('/products');
+                        }
+                      }}
                       className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                     />
                   </div>
@@ -389,14 +432,23 @@ export default function Navbar() {
                     </div>
 
                     {/* Shopping Cart */}
-                    <Button
-                      variant="ghost"
-                      size="default"
-                      className="justify-start w-full h-12 text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+                    <button
+                      onClick={() => {
+                        setIsMobileMenuOpen(false);
+                        dispatch(openCart());
+                      }}
+                      className="flex items-center justify-start w-full h-12 px-3 py-3 text-gray-700 hover:text-gray-900 hover:bg-gray-50 transition-colors rounded-md"
                     >
-                      <ShoppingCart className="w-4 h-4 mr-3" />
-                      Cart
-                    </Button>
+                      <div className="relative mr-3">
+                        <ShoppingCart className="w-4 h-4" />
+                        {totalQuantity > 0 && (
+                          <span className="absolute -top-1 -right-1 w-3 h-3 bg-blue-600 text-white text-xs rounded-full flex items-center justify-center font-medium">
+                            {totalQuantity > 9 ? '9+' : totalQuantity}
+                          </span>
+                        )}
+                      </div>
+                      Cart {totalQuantity > 0 && `(${totalQuantity})`}
+                    </button>
 
                     {/* Sign Out */}
                     <Button
