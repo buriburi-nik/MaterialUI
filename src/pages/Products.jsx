@@ -64,6 +64,18 @@ const Products = () => {
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
   const [isFiltersCollapsed, setIsFiltersCollapsed] = useState(false);
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
+  const [showNotesModal, setShowNotesModal] = useState(false);
+  const [showOrderHistoryModal, setShowOrderHistoryModal] = useState(false);
+  const [showHelpModal, setShowHelpModal] = useState(false);
+  const [showBoardModal, setShowBoardModal] = useState(false);
+  const [notes, setNotes] = useState([]);
+  const [newNote, setNewNote] = useState('');
+  const [boardForm, setBoardForm] = useState({ name: '', description: '', category: 'design' });
+  const [orderHistory, setOrderHistory] = useState([
+    { id: 1, orderNumber: 'ORD-2025-001', date: '2025-01-15', items: 3, total: '$245.00', status: 'Delivered' },
+    { id: 2, orderNumber: 'ORD-2025-002', date: '2025-01-20', items: 5, total: '$189.50', status: 'Processing' },
+    { id: 3, orderNumber: 'ORD-2025-003', date: '2025-01-25', items: 2, total: '$320.00', status: 'Shipped' }
+  ]);
 
   const sidebarItems = [
     {
@@ -128,6 +140,59 @@ const Products = () => {
   };
 
   const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
+
+  const handleSidebarAction = (action) => {
+    switch(action) {
+      case 'Boards':
+        setShowBoardModal(true);
+        break;
+      case 'Notes':
+        setShowNotesModal(true);
+        break;
+      case 'Help':
+        setShowHelpModal(true);
+        break;
+      case 'Order history':
+        setShowOrderHistoryModal(true);
+        break;
+      default:
+        break;
+    }
+  };
+
+  const handleAddNote = () => {
+    if (!newNote.trim()) return;
+
+    const note = {
+      id: Date.now(),
+      content: newNote,
+      createdAt: new Date().toISOString()
+    };
+
+    setNotes(prev => [note, ...prev]);
+    setNewNote('');
+  };
+
+  const handleDeleteNote = (id) => {
+    setNotes(prev => prev.filter(note => note.id !== id));
+  };
+
+  const handleCreateBoard = () => {
+    if (!boardForm.name.trim()) return;
+
+    const newBoard = {
+      id: Date.now(),
+      name: boardForm.name,
+      description: boardForm.description,
+      category: boardForm.category,
+      createdAt: new Date().toISOString(),
+      itemsCount: 0
+    };
+
+    setBoardForm({ name: '', description: '', category: 'design' });
+    setShowBoardModal(false);
+    showToast(`Board "${newBoard.name}" created successfully!`, 'success');
+  };
 
   // Helper function to get unique values for filter options
   const getUniqueValues = (key) => {
@@ -337,6 +402,7 @@ const Products = () => {
                         {section.items.map((item, itemIndex) => (
                           <button
                             key={itemIndex}
+                            onClick={() => handleSidebarAction(item.name)}
                             className="flex items-center w-full gap-3 p-2 text-left text-gray-700 transition-colors rounded-lg hover:bg-gray-100"
                           >
                             <item.icon className="w-5 h-5 text-gray-500" />
@@ -407,6 +473,7 @@ const Products = () => {
                         {section.items.map((item, itemIndex) => (
                           <button
                             key={itemIndex}
+                            onClick={() => handleSidebarAction(item.name)}
                             className="flex items-center w-full gap-3 p-1 text-left text-gray-700 transition-colors rounded-lg hover:bg-gray-50 group"
                           >
                             <item.icon className="w-5 h-5 text-gray-500 group-hover:text-gray-700" />
@@ -1180,6 +1247,236 @@ const Products = () => {
               >
                 Apply Filters ({filteredProducts.length} products)
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Board Creation Modal */}
+      {showBoardModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-md mx-4">
+            <div className="p-6">
+              <h3 className="text-lg font-semibold text-gray-800 mb-4">Create New Board</h3>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Board Name</label>
+                  <input
+                    type="text"
+                    value={boardForm.name}
+                    onChange={(e) => setBoardForm(prev => ({ ...prev, name: e.target.value }))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="Enter board name"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                  <select
+                    value={boardForm.category}
+                    onChange={(e) => setBoardForm(prev => ({ ...prev, category: e.target.value }))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  >
+                    <option value="design">Design</option>
+                    <option value="mood">Mood Board</option>
+                    <option value="materials">Materials</option>
+                    <option value="inspiration">Inspiration</option>
+                    <option value="presentation">Presentation</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Description (Optional)</label>
+                  <textarea
+                    value={boardForm.description}
+                    onChange={(e) => setBoardForm(prev => ({ ...prev, description: e.target.value }))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="Enter board description"
+                    rows={3}
+                  />
+                </div>
+              </div>
+              <div className="flex gap-3 mt-6">
+                <button
+                  onClick={() => setShowBoardModal(false)}
+                  className="flex-1 px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleCreateBoard}
+                  disabled={!boardForm.name.trim()}
+                  className="flex-1 px-4 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed"
+                >
+                  Create Board
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Notes Modal */}
+      {showNotesModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl mx-4 max-h-[80vh] overflow-hidden">
+            <div className="p-6 border-b border-gray-200">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-gray-800">Notes</h3>
+                <button
+                  onClick={() => setShowNotesModal(false)}
+                  className="p-1 text-gray-400 hover:text-gray-600"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+            <div className="p-6 overflow-y-auto max-h-[60vh]">
+              <div className="space-y-4 mb-6">
+                <div className="flex gap-3">
+                  <textarea
+                    value={newNote}
+                    onChange={(e) => setNewNote(e.target.value)}
+                    placeholder="Add a new note..."
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    rows={3}
+                  />
+                  <button
+                    onClick={handleAddNote}
+                    disabled={!newNote.trim()}
+                    className="px-4 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed h-fit"
+                  >
+                    Add
+                  </button>
+                </div>
+              </div>
+              <div className="space-y-3">
+                {notes.length === 0 ? (
+                  <p className="text-gray-500 text-center py-8">No notes yet. Add your first note above.</p>
+                ) : (
+                  notes.map((note) => (
+                    <div key={note.id} className="p-4 bg-gray-50 rounded-lg">
+                      <div className="flex justify-between items-start mb-2">
+                        <p className="text-sm text-gray-600">
+                          {new Date(note.createdAt).toLocaleDateString()}
+                        </p>
+                        <button
+                          onClick={() => handleDeleteNote(note.id)}
+                          className="text-red-500 hover:text-red-700 text-sm"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                      <p className="text-gray-800">{note.content}</p>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Order History Modal */}
+      {showOrderHistoryModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-4xl mx-4 max-h-[80vh] overflow-hidden">
+            <div className="p-6 border-b border-gray-200">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-gray-800">Order History</h3>
+                <button
+                  onClick={() => setShowOrderHistoryModal(false)}
+                  className="p-1 text-gray-400 hover:text-gray-600"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+            <div className="p-6 overflow-y-auto max-h-[60vh]">
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b border-gray-200">
+                      <th className="text-left py-3 text-sm font-medium text-gray-500">Order Number</th>
+                      <th className="text-left py-3 text-sm font-medium text-gray-500">Date</th>
+                      <th className="text-left py-3 text-sm font-medium text-gray-500">Items</th>
+                      <th className="text-left py-3 text-sm font-medium text-gray-500">Total</th>
+                      <th className="text-left py-3 text-sm font-medium text-gray-500">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {orderHistory.map((order) => (
+                      <tr key={order.id} className="border-b border-gray-100 hover:bg-gray-50">
+                        <td className="py-4 text-sm font-medium text-gray-900">{order.orderNumber}</td>
+                        <td className="py-4 text-sm text-gray-600">{order.date}</td>
+                        <td className="py-4 text-sm text-gray-600">{order.items} items</td>
+                        <td className="py-4 text-sm font-medium text-gray-900">{order.total}</td>
+                        <td className="py-4">
+                          <span className={`px-2 py-1 text-xs rounded-full ${
+                            order.status === 'Delivered' ? 'bg-green-100 text-green-800' :
+                            order.status === 'Shipped' ? 'bg-blue-100 text-blue-800' :
+                            'bg-yellow-100 text-yellow-800'
+                          }`}>
+                            {order.status}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Help Modal */}
+      {showHelpModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl mx-4 max-h-[80vh] overflow-hidden">
+            <div className="p-6 border-b border-gray-200">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-gray-800">Help & Support</h3>
+                <button
+                  onClick={() => setShowHelpModal(false)}
+                  className="p-1 text-gray-400 hover:text-gray-600"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+            <div className="p-6 overflow-y-auto max-h-[60vh]">
+              <div className="space-y-6">
+                <div>
+                  <h4 className="font-medium text-gray-900 mb-3">Frequently Asked Questions</h4>
+                  <div className="space-y-3">
+                    <div className="p-4 bg-gray-50 rounded-lg">
+                      <h5 className="font-medium text-gray-800 mb-2">How do I filter products?</h5>
+                      <p className="text-sm text-gray-600">Use the filters panel on the left to narrow down products by brand, price, color, and more.</p>
+                    </div>
+                    <div className="p-4 bg-gray-50 rounded-lg">
+                      <h5 className="font-medium text-gray-800 mb-2">How do I add products to my cart?</h5>
+                      <p className="text-sm text-gray-600">Click the "Add to cart" button on any product card or use the detailed product view.</p>
+                    </div>
+                    <div className="p-4 bg-gray-50 rounded-lg">
+                      <h5 className="font-medium text-gray-800 mb-2">Can I save products for later?</h5>
+                      <p className="text-sm text-gray-600">Yes! Create boards to organize and save products for your projects.</p>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <h4 className="font-medium text-gray-900 mb-3">Contact Support</h4>
+                  <div className="space-y-3">
+                    <p className="text-sm text-gray-600">Need additional help? Reach out to our support team:</p>
+                    <div className="flex gap-4">
+                      <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">
+                        Email Support
+                      </button>
+                      <button className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 text-sm">
+                        Live Chat
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

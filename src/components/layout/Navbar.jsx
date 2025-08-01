@@ -26,20 +26,36 @@ export default function Navbar() {
   };
 
   const getInitials = (user) => {
-    if (!user?.email) return "U";
-    const email = user.email;
-    const parts = email.split("@")[0].split(".");
-    if (parts.length >= 2) {
-      return (parts[0][0] + parts[1][0]).toUpperCase();
+    if (user?.firstName && user?.lastName) {
+      return (user.firstName[0] + user.lastName[0]).toUpperCase();
     }
-    return email[0].toUpperCase();
+    if (user?.firstName) {
+      return user.firstName[0].toUpperCase();
+    }
+    if (user?.email) {
+      const email = user.email;
+      const parts = email.split("@")[0].split(".");
+      if (parts.length >= 2) {
+        return (parts[0][0] + parts[1][0]).toUpperCase();
+      }
+      return email[0].toUpperCase();
+    }
+    return "U";
   };
 
   const getUserDisplayName = (user) => {
-    if (!user?.email) return "User";
-    const email = user.email;
-    const localPart = email.split("@")[0];
-    return localPart.replace(".", " ");
+    if (user?.firstName && user?.lastName) {
+      return `${user.firstName} ${user.lastName}`;
+    }
+    if (user?.firstName) {
+      return user.firstName;
+    }
+    if (user?.email) {
+      const email = user.email;
+      const localPart = email.split("@")[0];
+      return localPart.replace(".", " ");
+    }
+    return "User";
   };
 
   // Prevent background scroll when mobile menu is open
