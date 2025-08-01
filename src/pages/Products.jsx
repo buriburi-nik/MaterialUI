@@ -668,7 +668,7 @@ const Products = () => {
                   </div>
 
                   {/* Static sections that don't have content yet */}
-                  {['Availability', 'Metallic Finish', 'Content', 'Flammability', 'Abrasion', 'Climate Impact', 'Human Health Impact', 'Social Equity Impact'].map((section) => (
+                  {/* {['Availability', 'Metallic Finish', 'Content', 'Flammability', 'Abrasion', 'Climate Impact', 'Human Health Impact', 'Social Equity Impact'].map((section) => (
                     <div key={section} className="pb-2 border-b border-gray-100">
                       <button
                         onClick={() => toggleSection(section)}
@@ -683,7 +683,7 @@ const Products = () => {
                         </div>
                       )}
                     </div>
-                  ))}
+                  ))} */}
                 </div>
               </div>
             </div>
