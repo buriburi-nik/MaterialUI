@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useAuth } from "@/hooks/useAuth";
 import {
   FolderOpen,
   FileText,
@@ -13,7 +12,10 @@ import {
 } from "lucide-react";
 
 export default function Dashboard() {
-  const { user, userProfile } = useAuth();
+  // Mock user data for demo
+  const user = { email: "user@example.com" };
+  const userProfile = { fullName: "John Doe" };
+  
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -59,138 +61,124 @@ export default function Dashboard() {
 
   return (
     <div className="flex flex-col h-screen overflow-hidden bg-gray-50">
-      {/* Mobile Menu Button */}
-      <div className="fixed z-50 top-4 left-4 lg:hidden">
-        <button
-          onClick={toggleSidebar}
-          className="p-3 transition-colors bg-white border border-gray-200 rounded-lg shadow-lg hover:bg-gray-50"
-          aria-label="Toggle sidebar"
-        >
-          <Menu className="w-5 h-5 text-gray-600" />
-        </button>
-      </div>
-
-      {/* Mobile Overlay */}
-      {isMobile && isSidebarOpen && (
-        <div
-          className="fixed inset-0 z-40 bg-black bg-opacity-50 lg:hidden"
-          onClick={closeSidebar}
-        />
+      {/* Mobile Menu Button - Hidden on mobile */}
+      {!isMobile && (
+        <div className="fixed z-50 top-4 left-4 lg:hidden">
+          <button
+            onClick={toggleSidebar}
+            className="p-3 transition-colors bg-white border border-gray-200 rounded-lg shadow-lg hover:bg-gray-50"
+            aria-label="Toggle sidebar"
+          >
+            <Menu className="w-5 h-5 text-gray-600" />
+          </button>
+        </div>
       )}
 
       <div className="flex flex-1 h-0 overflow-hidden lg:pt-16">
-        {/* Sidebar */}
-        <div
-          className={`h-full bg-white border-r border-gray-200 transition-all duration-300 ease-in-out relative z-50 flex-shrink-0
-          ${
-            isMobile
-              ? `fixed top-0 left-0 ${
-                  isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-                } w-80`
-              : isSidebarOpen
-              ? "w-80"
-              : "w-16"
-          }`}
-        >
-          {!isMobile && (
-            <button
-              onClick={toggleSidebar}
-              className="absolute top-4 -right-3 z-20 p-1.5 bg-white border border-gray-200 rounded-full shadow-sm hover:bg-gray-50"
-              aria-label={isSidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
-            >
-              {isSidebarOpen ? (
-                <X className="w-4 h-4 text-gray-600" />
-              ) : (
-                <Menu className="w-4 h-4 text-gray-600" />
-              )}
-            </button>
-          )}
-
-          {isMobile && (
-            <button
-              onClick={closeSidebar}
-              className="absolute z-20 p-2 transition-colors rounded-lg top-4 right-4 hover:bg-gray-100 lg:hidden"
-              aria-label="Close sidebar"
-            >
-              <X className="w-5 h-5 text-gray-600" />
-            </button>
-          )}
-
+        {/* Sidebar - Hidden on mobile */}
+        {!isMobile && (
           <div
-            className={`h-full flex flex-col transition-opacity duration-300 overflow-hidden ${
-              !isMobile && !isSidebarOpen
-                ? "opacity-0 pointer-events-none"
-                : "opacity-100"
+            className={`h-full bg-white border-r border-gray-200 transition-all duration-300 ease-in-out relative z-50 flex-shrink-0
+            ${
+              isMobile
+                ? `fixed top-0 left-0 ${
+                    isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+                  } w-80`
+                : isSidebarOpen
+                ? "w-80"
+                : "w-16"
             }`}
           >
-            <div className={`p-6 flex-1 ${isMobile ? "pt-16" : ""}`}>
-              <div className="mb-8">
-                <div className="flex items-center justify-between mb-3">
-                  <span className="mb-4 text-sm font-medium text-gray-700">
-                    Choose project
-                  </span>
-                  <ChevronDown className="w-4 h-4 text-gray-500" />
-                </div>
-                <button className="flex items-center justify-center w-full gap-2 p-2 px-4 py-2 text-sm font-medium text-white bg-gray-800 rounded-full hover:bg-gray-700">
-                  <Plus className="w-4 h-4" />
-                  New project
-                </button>
-              </div>
-
-              {/* Sidebar Navigation */}
-              <div className="space-y-8">
-                {sidebarItems.map((section, sectionIndex) => (
-                  <div key={sectionIndex}>
-                    <h3 className="mb-4 text-sm font-medium text-gray-500">
-                      {section.category}
-                    </h3>
-                    <div className="space-y-2">
-                      {section.items.map((item, itemIndex) => (
-                        <button
-                          key={itemIndex}
-                          onClick={closeSidebar}
-                          className="flex items-center w-full gap-3 p-1 text-left text-gray-700 transition-colors rounded-lg hover:bg-gray-50 group"
-                        >
-                          <item.icon className="flex-shrink-0 w-5 h-5 text-gray-500 group-hover:text-gray-700" />
-                          <span className="font-medium">{item.name}</span>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Collapsed Sidebar Icons */}
-            {!isMobile && !isSidebarOpen && (
-              <div className="flex flex-col items-center h-full py-6 space-y-4">
-                <button
-                  onClick={toggleSidebar}
-                  className="p-2 text-gray-600 transition-colors rounded-lg hover:bg-gray-50"
-                  title="Expand sidebar"
-                >
-                  <Menu className="w-5 h-5" />
-                </button>
-                {sidebarItems.flatMap((section, idx) =>
-                  section.items.map((item, index) => (
-                    <button
-                      key={`${section.category}-${index}`}
-                      className="p-2 text-gray-600 transition-colors rounded-lg hover:bg-gray-50"
-                      title={item.name}
-                    >
-                      <item.icon className="w-5 h-5" />
-                    </button>
-                  ))
+            {!isMobile && (
+              <button
+                onClick={toggleSidebar}
+                className="absolute top-4 -right-3 z-20 p-1.5 bg-white border border-gray-200 rounded-full shadow-sm hover:bg-gray-50"
+                aria-label={isSidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
+              >
+                {isSidebarOpen ? (
+                  <X className="w-4 h-4 text-gray-600" />
+                ) : (
+                  <Menu className="w-4 h-4 text-gray-600" />
                 )}
-              </div>
+              </button>
             )}
+
+            <div
+              className={`h-full flex flex-col transition-opacity duration-300 overflow-hidden ${
+                !isMobile && !isSidebarOpen
+                  ? "opacity-0 pointer-events-none"
+                  : "opacity-100"
+              }`}
+            >
+              <div className={`p-6 flex-1 ${isMobile ? "pt-16" : ""}`}>
+                <div className="mb-8">
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="mb-4 text-sm font-medium text-gray-700">
+                      Choose project
+                    </span>
+                    <ChevronDown className="w-4 h-4 text-gray-500" />
+                  </div>
+                  <button className="flex items-center justify-center w-full gap-2 p-2 px-4 py-2 text-sm font-medium text-white bg-gray-800 rounded-full hover:bg-gray-700">
+                    <Plus className="w-4 h-4" />
+                    New project
+                  </button>
+                </div>
+
+                {/* Sidebar Navigation */}
+                <div className="space-y-8">
+                  {sidebarItems.map((section, sectionIndex) => (
+                    <div key={sectionIndex}>
+                      <h3 className="mb-4 text-sm font-medium text-gray-500">
+                        {section.category}
+                      </h3>
+                      <div className="space-y-2">
+                        {section.items.map((item, itemIndex) => (
+                          <button
+                            key={itemIndex}
+                            onClick={closeSidebar}
+                            className="flex items-center w-full gap-3 p-1 text-left text-gray-700 transition-colors rounded-lg hover:bg-gray-50 group"
+                          >
+                            <item.icon className="flex-shrink-0 w-5 h-5 text-gray-500 group-hover:text-gray-700" />
+                            <span className="font-medium">{item.name}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Collapsed Sidebar Icons */}
+              {!isMobile && !isSidebarOpen && (
+                <div className="flex flex-col items-center h-full py-6 space-y-4">
+                  <button
+                    onClick={toggleSidebar}
+                    className="p-2 text-gray-600 transition-colors rounded-lg hover:bg-gray-50"
+                    title="Expand sidebar"
+                  >
+                    <Menu className="w-5 h-5" />
+                  </button>
+                  {sidebarItems.flatMap((section, idx) =>
+                    section.items.map((item, index) => (
+                      <button
+                        key={`${section.category}-${index}`}
+                        className="p-2 text-gray-600 transition-colors rounded-lg hover:bg-gray-50"
+                        title={item.name}
+                      >
+                        <item.icon className="w-5 h-5" />
+                      </button>
+                    ))
+                  )}
+                </div>
+              )}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Main Content */}
         <div className="flex flex-col flex-1 h-full overflow-hidden">
           <div
-            className={`flex-1 ${isMobile ? "p-4 pt-20" : "p-8"}`}
+            className={`flex-1 ${isMobile ? "p-4" : "p-8"}`}
             style={{
               overflowY: "auto",
               scrollbarWidth: "none",
