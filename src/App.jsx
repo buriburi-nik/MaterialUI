@@ -10,6 +10,7 @@ import SignIn from "@/pages/SignIn";
 import Register from "@/pages/Register";
 import ForgotPassword from "@/pages/ForgotPassword";
 import Brands from "@/pages/Brands";
+import Products from "@/pages/Products";
 import Dashboard from "@/pages/Dashboard";
 import Footer from "@/components/layout/Footer";
 
@@ -42,6 +43,7 @@ function AppRoutes() {
           <Route path="/register" element={<Register />} />
           <Route path="/reset" element={<ForgotPassword />} />
           <Route path="/brands" element={<><Navbar /><Brands /></>} />
+          <Route path="/products" element={<><Navbar /><Products /><Footer /></>} />
           <Route path="/dashboard" element={<><Navbar /><Dashboard /><Footer/></>} />
         </Routes>
       </div>

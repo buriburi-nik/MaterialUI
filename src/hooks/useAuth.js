@@ -57,7 +57,7 @@ export const useAuth = () => {
     try {
       const result = await dispatch(loginUser(credentials)).unwrap();
       
-      if (options.showSuccessToast !== false) {
+      if (options.showSuccessToast === true) {
         showToast(`Welcome back, ${result.user.firstName}!`, 'success');
       }
       
@@ -103,7 +103,7 @@ export const useAuth = () => {
     try {
       await dispatch(logoutUser()).unwrap();
       
-      if (options.showSuccessToast !== false) {
+      if (options.showSuccessToast === true) {
         showToast('Successfully logged out', 'success');
       }
       
@@ -114,7 +114,7 @@ export const useAuth = () => {
       }
     } catch (error) {
       // Even if logout fails, we clear local state
-      if (options.showErrorToast !== false) {
+      if (options.showErrorToast === true) {
         showToast('Logged out locally', 'info');
       }
       

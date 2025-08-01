@@ -11,6 +11,7 @@ export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
+  const [isProductsDropdownOpen, setIsProductsDropdownOpen] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { isAuthenticated, user, userProfile, logout } = useAuth();
@@ -47,11 +48,14 @@ export default function Navbar() {
     }
   }, [isMobileMenuOpen]);
 
-  // Close user dropdown when clicking outside
+  // Close dropdowns when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (isUserDropdownOpen && !event.target.closest('.user-dropdown')) {
         setIsUserDropdownOpen(false);
+      }
+      if (isProductsDropdownOpen && !event.target.closest('.products-dropdown')) {
+        setIsProductsDropdownOpen(false);
       }
     };
 
@@ -59,7 +63,7 @@ export default function Navbar() {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [isUserDropdownOpen]);
+  }, [isUserDropdownOpen, isProductsDropdownOpen]);
 
   return (
     <nav className={cn("fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200 shadow-sm")}>
@@ -95,20 +99,84 @@ export default function Navbar() {
             {/* Navigation Links */}
             <div className="items-center hidden px-4 py-2 space-x-10 bg-white shadow-sm md:flex rounded-xl">
               {/* Products dropdown */}
-              <div
-                className="relative flex items-center space-x-1 transition-all cursor-pointer group"
-                onClick={isAuthenticated ? null : () => showAuthToast("Sign in to explore our product catalog")}
-              >
-                <span className="font-medium text-gray-700 transition-colors duration-200 group-hover:text-gray-900">
-                  Products
-                </span>
-                <ChevronDown className="w-4 h-4 text-gray-500 transition-transform duration-300 group-hover:rotate-180" />
+              <div className="relative products-dropdown">
+                <button
+                  className="flex items-center space-x-1 transition-all cursor-pointer"
+                  onClick={() => {
+                    if (isAuthenticated) {
+                      setIsProductsDropdownOpen(!isProductsDropdownOpen);
+                    } else {
+                      showAuthToast("Sign in to explore our product catalog");
+                    }
+                  }}
+                >
+                  <span className="font-medium text-gray-700 transition-colors duration-200 hover:text-gray-900">
+                    Products
+                  </span>
+                  <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform duration-300 ${isProductsDropdownOpen ? 'rotate-180' : ''}`} />
+                </button>
 
-                {/* Optional dropdown panel */}
-                {isAuthenticated && (
-                  <div className="absolute top-full mt-2 hidden group-hover:flex flex-col bg-white border border-gray-200 rounded-md shadow-lg p-3 min-w-[150px] z-10">
-                    <a href="#product1" className="px-2 py-1 text-sm text-gray-700 rounded hover:bg-gray-100">Product 1</a>
-                    <a href="#product2" className="px-2 py-1 text-sm text-gray-700 rounded hover:bg-gray-100">Product 2</a>
+                {/* Clean dropdown panel */}
+                {isAuthenticated && isProductsDropdownOpen && (
+                  <div className="absolute top-full mt-2 bg-white border border-gray-200 rounded-lg shadow-lg py-4 min-w-[600px] z-10">
+                    <div className="grid grid-cols-3 gap-6 px-4">
+                      {/* Architectural */}
+                      <div>
+                        <h3 className="font-medium text-gray-900 mb-3 text-sm">Architectural</h3>
+                        <div className="space-y-1">
+                          <button onClick={() => { setIsProductsDropdownOpen(false); navigate('/products'); }} className="block text-sm text-gray-600 hover:text-gray-900 py-1 text-left w-full">Ceiling</button>
+                          <button onClick={() => { setIsProductsDropdownOpen(false); navigate('/products'); }} className="block text-sm text-gray-600 hover:text-gray-900 py-1 text-left w-full">Decking</button>
+                          <button onClick={() => { setIsProductsDropdownOpen(false); navigate('/products'); }} className="block text-sm text-gray-600 hover:text-gray-900 py-1 text-left w-full">Facade</button>
+                          <button onClick={() => { setIsProductsDropdownOpen(false); navigate('/products'); }} className="block text-sm text-gray-600 hover:text-gray-900 py-1 text-left w-full">HVAC</button>
+                          <button onClick={() => { setIsProductsDropdownOpen(false); navigate('/products'); }} className="block text-sm text-gray-600 hover:text-gray-900 py-1 text-left w-full">Moulding & Trim</button>
+                          <button onClick={() => { setIsProductsDropdownOpen(false); navigate('/products'); }} className="block text-sm text-gray-600 hover:text-gray-900 py-1 text-left w-full">Paving & Landscape</button>
+                          <button onClick={() => { setIsProductsDropdownOpen(false); navigate('/products'); }} className="block text-sm text-gray-600 hover:text-gray-900 py-1 text-left w-full">Stair & Elevator</button>
+                          <button onClick={() => { setIsProductsDropdownOpen(false); navigate('/products'); }} className="block text-sm text-gray-600 hover:text-gray-900 py-1 text-left w-full">Wall Systems</button>
+                        </div>
+                      </div>
+
+                      {/* Materials */}
+                      <div>
+                        <h3 className="font-medium text-gray-900 mb-3 text-sm">Materials</h3>
+                        <div className="space-y-1">
+                          <button onClick={() => { setIsProductsDropdownOpen(false); navigate('/products'); }} className="block text-sm text-gray-600 hover:text-gray-900 py-1 text-left w-full">Film</button>
+                          <button onClick={() => { setIsProductsDropdownOpen(false); navigate('/products'); }} className="block text-sm text-gray-600 hover:text-gray-900 py-1 text-left w-full">Flooring</button>
+                          <button onClick={() => { setIsProductsDropdownOpen(false); navigate('/products'); }} className="block text-sm text-gray-600 hover:text-gray-900 py-1 text-left w-full">Glass</button>
+                          <button onClick={() => { setIsProductsDropdownOpen(false); navigate('/products'); }} className="block text-sm text-gray-600 hover:text-gray-900 py-1 text-left w-full">Leather</button>
+                          <button onClick={() => { setIsProductsDropdownOpen(false); navigate('/products'); }} className="block text-sm text-gray-600 hover:text-gray-900 py-1 text-left w-full">Masonry & Stone</button>
+                          <button onClick={() => { setIsProductsDropdownOpen(false); navigate('/products'); }} className="block text-sm text-gray-600 hover:text-gray-900 py-1 text-left w-full">Metal</button>
+                          <button onClick={() => { setIsProductsDropdownOpen(false); navigate('/products'); }} className="block text-sm text-gray-900 hover:text-gray-900 py-1 font-medium text-left w-full">Paints</button>
+                          <button onClick={() => { setIsProductsDropdownOpen(false); navigate('/products'); }} className="block text-sm text-gray-600 hover:text-gray-900 py-1 text-left w-full">Paneling</button>
+                          <button onClick={() => { setIsProductsDropdownOpen(false); navigate('/products'); }} className="block text-sm text-gray-600 hover:text-gray-900 py-1 text-left w-full">Resin</button>
+                          <button onClick={() => { setIsProductsDropdownOpen(false); navigate('/products'); }} className="block text-sm text-gray-600 hover:text-gray-900 py-1 text-left w-full">Surfaces</button>
+                          <button onClick={() => { setIsProductsDropdownOpen(false); navigate('/products'); }} className="block text-sm text-gray-600 hover:text-gray-900 py-1 text-left w-full">Textiles</button>
+                        </div>
+                      </div>
+
+                      {/* Furniture Fixtures And Equipment */}
+                      <div>
+                        <h3 className="font-medium text-gray-900 mb-3 text-sm">Furniture Fixtures And Equipment</h3>
+                        <div className="space-y-1">
+                          <button onClick={() => { setIsProductsDropdownOpen(false); navigate('/products'); }} className="block text-sm text-gray-600 hover:text-gray-900 py-1 text-left w-full">Acoustical</button>
+                          <button onClick={() => { setIsProductsDropdownOpen(false); navigate('/products'); }} className="block text-sm text-gray-600 hover:text-gray-900 py-1 text-left w-full">Appliances</button>
+                          <button onClick={() => { setIsProductsDropdownOpen(false); navigate('/products'); }} className="block text-sm text-gray-600 hover:text-gray-900 py-1 text-left w-full">Bathroom</button>
+                          <button onClick={() => { setIsProductsDropdownOpen(false); navigate('/products'); }} className="block text-sm text-gray-600 hover:text-gray-900 py-1 text-left w-full">Decor & Accessories</button>
+                          <button onClick={() => { setIsProductsDropdownOpen(false); navigate('/products'); }} className="block text-sm text-gray-600 hover:text-gray-900 py-1 text-left w-full">Furniture</button>
+                          <button onClick={() => { setIsProductsDropdownOpen(false); navigate('/products'); }} className="block text-sm text-gray-600 hover:text-gray-900 py-1 text-left w-full">Gym & Recreation</button>
+                          <button onClick={() => { setIsProductsDropdownOpen(false); navigate('/products'); }} className="block text-sm text-gray-600 hover:text-gray-900 py-1 text-left w-full">Hardware</button>
+                          <button onClick={() => { setIsProductsDropdownOpen(false); navigate('/products'); }} className="block text-sm text-gray-600 hover:text-gray-900 py-1 font-medium text-left w-full">Kitchen</button>
+                          <button onClick={() => { setIsProductsDropdownOpen(false); navigate('/products'); }} className="block text-sm text-gray-600 hover:text-gray-900 py-1 text-left w-full">Lighting</button>
+                          <button onClick={() => { setIsProductsDropdownOpen(false); navigate('/products'); }} className="block text-sm text-gray-600 hover:text-gray-900 py-1 text-left w-full">Outdoor</button>
+                          <button onClick={() => { setIsProductsDropdownOpen(false); navigate('/products'); }} className="block text-sm text-gray-600 hover:text-gray-900 py-1 text-left w-full">Window Treatments</button>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Footer buttons */}
+                    <div className="mt-4 pt-4 border-t border-gray-100 px-4 flex justify-between">
+                      <button onClick={() => { setIsProductsDropdownOpen(false); navigate('/products'); }} className="text-sm text-gray-600 hover:text-gray-900">See all Products</button>
+                      <button onClick={() => { setIsProductsDropdownOpen(false); navigate('/products'); }} className="text-sm bg-gray-900 text-white px-3 py-1 rounded hover:bg-gray-800">See all New Products</button>
+                    </div>
                   </div>
                 )}
               </div>
