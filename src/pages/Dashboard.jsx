@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useAuth } from "@/hooks/useAuth";
 import {
   FolderOpen,
   FileText,
@@ -12,10 +13,7 @@ import {
 } from "lucide-react";
 
 export default function Dashboard() {
-  // Mock user data for demo
-  const user = { email: "user@example.com" };
-  const userProfile = { fullName: "John Doe" };
-  
+  const { user, userProfile } = useAuth();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -23,17 +21,17 @@ export default function Dashboard() {
     {
       category: "Project resources",
       items: [
-        { name: "Boards", icon: FolderOpen, count: null },
-        { name: "Notes", icon: FileText, count: null },
+        { name: "Boards", icon: FolderOpen },
+        { name: "Notes", icon: FileText },
       ],
     },
     {
       category: "Messaging",
-      items: [{ name: "Help", icon: Headphones, count: null }],
+      items: [{ name: "Help", icon: Headphones }],
     },
     {
       category: "History",
-      items: [{ name: "Order history", icon: Calendar, count: null }],
+      items: [{ name: "Order history", icon: Calendar }],
     },
   ];
 
@@ -57,60 +55,83 @@ export default function Dashboard() {
   };
 
   const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
-  const closeSidebar = () => isMobile && setIsSidebarOpen(false);
 
   return (
     <div className="flex flex-col h-screen overflow-hidden bg-gray-50">
-      {/* Mobile Menu Button - Hidden on mobile */}
-      {!isMobile && (
-        <div className="fixed z-50 top-4 left-4 lg:hidden">
-          <button
-            onClick={toggleSidebar}
-            className="p-3 transition-colors bg-white border border-gray-200 rounded-lg shadow-lg hover:bg-gray-50"
-            aria-label="Toggle sidebar"
-          >
-            <Menu className="w-5 h-5 text-gray-600" />
-          </button>
-        </div>
-      )}
-
       <div className="flex flex-1 h-0 overflow-hidden lg:pt-16">
-        {/* Sidebar - Hidden on mobile */}
-        {!isMobile && (
-          <div
-            className={`h-full bg-white border-r border-gray-200 transition-all duration-300 ease-in-out relative z-50 flex-shrink-0
-            ${
-              isMobile
-                ? `fixed top-0 left-0 ${
-                    isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-                  } w-80`
-                : isSidebarOpen
-                ? "w-80"
-                : "w-16"
-            }`}
-          >
-            {!isMobile && (
+        {/* Sidebar */}
+        {isMobile ? (
+          <>
+            {/* Mobile Sidebar Drawer */}
+            <div
+              className={`fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 shadow-xl transform transition-transform duration-300 ease-in-out ${
+                isSidebarOpen ? "translate-y-0" : "translate-y-full"
+              }`}
+            >
+              <div className="p-4">
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-sm font-medium text-gray-700">Menu</span>
+                  <button onClick={toggleSidebar}>
+                    <X className="w-5 h-5 text-gray-600" />
+                  </button>
+                </div>
+                <div className="space-y-6">
+                  {sidebarItems.map((section, sectionIndex) => (
+                    <div key={sectionIndex}>
+                      <h3 className="mb-2 text-xs font-semibold tracking-wide text-gray-500 uppercase">
+                        {section.category}
+                      </h3>
+                      <div className="space-y-2">
+                        {section.items.map((item, itemIndex) => (
+                          <button
+                            key={itemIndex}
+                            className="flex items-center w-full gap-3 p-2 text-left text-gray-700 transition-colors rounded-lg hover:bg-gray-100"
+                          >
+                            <item.icon className="w-5 h-5 text-gray-500" />
+                            <span className="text-sm font-medium">{item.name}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Mobile Sidebar Toggle Button */}
+            <div className="fixed z-40 bottom-4 left-4">
               <button
                 onClick={toggleSidebar}
-                className="absolute top-4 -right-3 z-20 p-1.5 bg-white border border-gray-200 rounded-full shadow-sm hover:bg-gray-50"
-                aria-label={isSidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
+                className="p-3 text-white bg-gray-800 rounded-full shadow-lg hover:bg-gray-700"
               >
-                {isSidebarOpen ? (
-                  <X className="w-4 h-4 text-gray-600" />
-                ) : (
-                  <Menu className="w-4 h-4 text-gray-600" />
-                )}
+                <Menu className="w-5 h-5" />
               </button>
-            )}
+            </div>
+          </>
+        ) : (
+          <div
+            className={`h-full bg-white border-r border-gray-200 transition-all duration-300 ease-in-out relative z-50 flex-shrink-0 ${
+              isSidebarOpen ? "w-80" : "w-16"
+            }`}
+          >
+            <button
+              onClick={toggleSidebar}
+              className="absolute top-4 -right-3 z-20 p-1.5 bg-white border border-gray-200 rounded-full shadow-sm hover:bg-gray-50"
+              aria-label={isSidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
+            >
+              {isSidebarOpen ? (
+                <X className="w-4 h-4 text-gray-600" />
+              ) : (
+                <Menu className="w-4 h-4 text-gray-600" />
+              )}
+            </button>
 
             <div
               className={`h-full flex flex-col transition-opacity duration-300 overflow-hidden ${
-                !isMobile && !isSidebarOpen
-                  ? "opacity-0 pointer-events-none"
-                  : "opacity-100"
+                !isSidebarOpen ? "opacity-0 pointer-events-none" : "opacity-100"
               }`}
             >
-              <div className={`p-6 flex-1 ${isMobile ? "pt-16" : ""}`}>
+              <div className="flex-1 p-6">
                 <div className="mb-8">
                   <div className="flex items-center justify-between mb-3">
                     <span className="mb-4 text-sm font-medium text-gray-700">
@@ -124,7 +145,6 @@ export default function Dashboard() {
                   </button>
                 </div>
 
-                {/* Sidebar Navigation */}
                 <div className="space-y-8">
                   {sidebarItems.map((section, sectionIndex) => (
                     <div key={sectionIndex}>
@@ -135,10 +155,9 @@ export default function Dashboard() {
                         {section.items.map((item, itemIndex) => (
                           <button
                             key={itemIndex}
-                            onClick={closeSidebar}
                             className="flex items-center w-full gap-3 p-1 text-left text-gray-700 transition-colors rounded-lg hover:bg-gray-50 group"
                           >
-                            <item.icon className="flex-shrink-0 w-5 h-5 text-gray-500 group-hover:text-gray-700" />
+                            <item.icon className="w-5 h-5 text-gray-500 group-hover:text-gray-700" />
                             <span className="font-medium">{item.name}</span>
                           </button>
                         ))}
@@ -147,30 +166,6 @@ export default function Dashboard() {
                   ))}
                 </div>
               </div>
-
-              {/* Collapsed Sidebar Icons */}
-              {!isMobile && !isSidebarOpen && (
-                <div className="flex flex-col items-center h-full py-6 space-y-4">
-                  <button
-                    onClick={toggleSidebar}
-                    className="p-2 text-gray-600 transition-colors rounded-lg hover:bg-gray-50"
-                    title="Expand sidebar"
-                  >
-                    <Menu className="w-5 h-5" />
-                  </button>
-                  {sidebarItems.flatMap((section, idx) =>
-                    section.items.map((item, index) => (
-                      <button
-                        key={`${section.category}-${index}`}
-                        className="p-2 text-gray-600 transition-colors rounded-lg hover:bg-gray-50"
-                        title={item.name}
-                      >
-                        <item.icon className="w-5 h-5" />
-                      </button>
-                    ))
-                  )}
-                </div>
-              )}
             </div>
           </div>
         )}
@@ -178,7 +173,7 @@ export default function Dashboard() {
         {/* Main Content */}
         <div className="flex flex-col flex-1 h-full overflow-hidden">
           <div
-            className={`flex-1 ${isMobile ? "p-4" : "p-8"}`}
+            className={`flex-1 ${isMobile ? "p-4 pt-10" : "p-8"}`}
             style={{
               overflowY: "auto",
               scrollbarWidth: "none",
@@ -186,7 +181,6 @@ export default function Dashboard() {
             }}
           >
             <div className="max-w-5xl mx-auto">
-              {/* Greeting */}
               <div className="mb-8 text-center">
                 <h1
                   className={`font-normal text-gray-800 ${
@@ -197,7 +191,6 @@ export default function Dashboard() {
                 </h1>
               </div>
 
-              {/* Residence Card */}
               <div className="max-w-2xl mx-auto mb-12">
                 <div
                   className={`text-center text-white bg-green-900 rounded-2xl ${
@@ -234,9 +227,7 @@ export default function Dashboard() {
                 </div>
               </div>
 
-              {/* Content Grid */}
               <div className="grid max-w-2xl gap-8 mx-auto mb-8 lg:grid-cols-1">
-                {/* Current Project */}
                 <div className="p-6 bg-white shadow-sm rounded-xl">
                   <h3 className="mb-6 text-lg font-semibold text-gray-800">
                     Current Project
@@ -257,7 +248,6 @@ export default function Dashboard() {
                   </div>
                 </div>
 
-                {/* Recent Boards */}
                 <div className="p-6 bg-white shadow-sm rounded-xl">
                   <h3 className="mb-6 text-lg font-semibold text-gray-800">
                     Recent Boards
@@ -281,7 +271,6 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* Hide scrollbar in WebKit browsers */}
           <style>{`
             div::-webkit-scrollbar {
               display: none;
@@ -291,15 +280,7 @@ export default function Dashboard() {
       </div>
 
       {/* Chat Button */}
-      <div
-        className={`fixed z-30 ${
-          isMobile ? "bottom-4 right-4" : "bottom-6 right-6"
-        }`}
-      >
-        <button className="p-3 text-white transition-colors bg-gray-800 rounded-full shadow-lg hover:bg-gray-700">
-          <MessageCircle className={`${isMobile ? "w-5 h-5" : "w-6 h-6"}`} />
-        </button>
-      </div>
+     
     </div>
   );
 }
