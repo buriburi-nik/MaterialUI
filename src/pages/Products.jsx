@@ -17,6 +17,7 @@ import {
   Plus,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import productsData from '@/data/products.json';
 
 const Products = () => {
   const { user, userProfile } = useAuth();
@@ -83,236 +84,8 @@ const Products = () => {
     { name: 'Furniture' },
   ];
 
-  const products = [
-    {
-      id: 1,
-      name: 'PROJECT FLOORS',
-      brand: 'VINYL FLOORING',
-      brandName: 'Project Floors',
-      image: '/api/placeholder/200/150',
-      type: 'flooring',
-      category: 'Flooring',
-      price: 45.99,
-      colors: ['Brown', 'Wood'],
-      country: 'Germany',
-      commercial: true,
-      residential: true,
-      pattern: 'Wood Grain',
-      features: ['Waterproof', 'Easy Install'],
-      application: 'Indoor',
-      hasButton: true,
-      buttonText: 'Add to Cart'
-    },
-    {
-      id: 2,
-      name: 'LASERHOLZ by Keplinger',
-      brand: 'WOOD',
-      brandName: 'Keplinger',
-      image: '/api/placeholder/200/150',
-      type: 'surfaces',
-      category: 'Surfaces',
-      price: 89.50,
-      colors: ['Gray', 'Natural'],
-      country: 'Austria',
-      commercial: true,
-      residential: false,
-      pattern: 'Geometric',
-      features: ['Laser Cut', 'Precision'],
-      application: 'Wall',
-      hasButton: true,
-      buttonText: 'Add to Cart'
-    },
-    {
-      id: 3,
-      name: 'Laminum',
-      brand: 'PORCELAIN PANEL',
-      brandName: 'Laminum',
-      image: '/api/placeholder/200/150',
-      type: 'surfaces',
-      category: 'Surfaces',
-      price: 125.00,
-      colors: ['Black', 'Charcoal'],
-      country: 'Italy',
-      commercial: true,
-      residential: true,
-      pattern: 'Solid',
-      features: ['Heat Resistant', 'Durable'],
-      application: 'Kitchen',
-      hasButton: true,
-      buttonText: 'Add to Cart'
-    },
-    {
-      id: 4,
-      name: 'PIANI',
-      brand: 'FINISHES',
-      brandName: 'Piani',
-      image: '/api/placeholder/200/150',
-      type: 'surfaces',
-      category: 'Surfaces',
-      price: 67.25,
-      colors: ['White', 'Cream'],
-      country: 'USA',
-      commercial: false,
-      residential: true,
-      pattern: 'Smooth',
-      features: ['Stain Resistant'],
-      application: 'Bathroom',
-      hasButton: false,
-      buttonText: 'Sample Finishes'
-    },
-    {
-      id: 5,
-      name: 'STARON',
-      brand: 'SOLID SURFACE',
-      brandName: 'Staron',
-      image: '/api/placeholder/200/150',
-      type: 'surfaces',
-      category: 'Surfaces',
-      price: 95.75,
-      colors: ['Pearl', 'White'],
-      country: 'South Korea',
-      commercial: true,
-      residential: true,
-      pattern: 'Solid',
-      features: ['Non-porous', 'Repairable'],
-      application: 'Countertop',
-      hasButton: true,
-      buttonText: 'Add to Cart'
-    },
-    {
-      id: 6,
-      name: 'QuartzDesign',
-      brand: 'FINISHES',
-      brandName: 'QuartzDesign',
-      image: '/api/placeholder/200/150',
-      type: 'surfaces',
-      category: 'Surfaces',
-      price: 156.00,
-      colors: ['Beige', 'Sand'],
-      country: 'Spain',
-      commercial: true,
-      residential: false,
-      pattern: 'Speckled',
-      features: ['Quartz Composite'],
-      application: 'Countertop',
-      hasButton: false,
-      buttonText: 'Sample Finishes'
-    },
-    {
-      id: 7,
-      name: 'Expormim',
-      brand: '15 FINISHES',
-      brandName: 'Expormim',
-      image: '/api/placeholder/200/150',
-      type: 'furniture',
-      category: 'Furniture',
-      price: 890.00,
-      colors: ['Natural', 'Wicker'],
-      country: 'Spain',
-      commercial: true,
-      residential: true,
-      pattern: 'Woven',
-      features: ['Handcrafted', 'Sustainable'],
-      application: 'Outdoor',
-      hasButton: false,
-      buttonText: 'Sample Finishes'
-    },
-    {
-      id: 8,
-      name: 'Forest Wallcovering',
-      brand: 'SPECIALTY WALLCOVERING',
-      brandName: 'Forest Collection',
-      image: '/api/placeholder/200/150',
-      type: 'surfaces',
-      category: 'Surfaces',
-      price: 78.50,
-      colors: ['Green', 'Forest'],
-      country: 'Canada',
-      commercial: false,
-      residential: true,
-      pattern: 'Nature',
-      features: ['Eco-friendly', 'Textured'],
-      application: 'Wall',
-      hasButton: true,
-      buttonText: 'Add to Cart'
-    },
-    {
-      id: 9,
-      name: 'AllStar Acoustic',
-      brand: '15 FINISHES',
-      brandName: 'AllStar',
-      image: '/api/placeholder/200/150',
-      type: 'surfaces',
-      category: 'Surfaces',
-      price: 234.75,
-      colors: ['Red', 'Blue'],
-      country: 'USA',
-      commercial: true,
-      residential: false,
-      pattern: 'Geometric',
-      features: ['Acoustic', 'Fire Resistant'],
-      application: 'Office',
-      hasButton: false,
-      buttonText: 'Sample Finishes'
-    },
-    {
-      id: 10,
-      name: 'LaFaenza Leonardo',
-      brand: 'PORCELAIN TILE',
-      brandName: 'LaFaenza',
-      image: '/api/placeholder/200/150',
-      type: 'tile',
-      category: 'Tile',
-      price: 34.99,
-      colors: ['Beige', 'Travertine'],
-      country: 'Italy',
-      commercial: true,
-      residential: true,
-      pattern: 'Stone Look',
-      features: ['Anti-slip', 'Frost Resistant'],
-      application: 'Floor',
-      hasButton: true,
-      buttonText: 'Add to Cart'
-    },
-    {
-      id: 11,
-      name: 'Modern Bathroom Suite',
-      brand: 'BATHROOM FIXTURES',
-      brandName: 'ModernBath',
-      image: '/api/placeholder/200/150',
-      type: 'bathroom',
-      category: 'Bathroom',
-      price: 1250.00,
-      colors: ['White', 'Chrome'],
-      country: 'Germany',
-      commercial: true,
-      residential: true,
-      pattern: 'Contemporary',
-      features: ['Water Saving', 'Easy Clean'],
-      application: 'Bathroom',
-      hasButton: true,
-      buttonText: 'Add to Cart'
-    },
-    {
-      id: 12,
-      name: 'Executive Office Chair',
-      brand: 'OFFICE FURNITURE',
-      brandName: 'OfficePro',
-      image: '/api/placeholder/200/150',
-      type: 'furniture',
-      category: 'Furniture',
-      price: 567.50,
-      colors: ['Black', 'Leather'],
-      country: 'USA',
-      commercial: true,
-      residential: false,
-      pattern: 'Leather',
-      features: ['Ergonomic', 'Adjustable'],
-      application: 'Office',
-      hasButton: true,
-      buttonText: 'Add to Cart'
-    }
-  ];
+  // Import products from JSON file
+  const products = productsData;
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -605,7 +378,7 @@ const Products = () => {
         {/* Main Content with Filters and Products */}
         <div className="flex flex-1 overflow-hidden">
           {/* Filters Sidebar */}
-          <div className="w-64 bg-white border-r border-gray-200 overflow-y-auto">
+          <div className="w-64 overflow-y-auto bg-white border-r border-gray-200">
             <div className="p-4">
               {/* Filters Header */}
               <div className="flex items-center justify-between mb-4">
@@ -648,13 +421,13 @@ const Products = () => {
               {/* Search Filters */}
               <div className="mb-4">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <Search className="absolute w-4 h-4 text-gray-400 transform -translate-y-1/2 left-3 top-1/2" />
                   <input
                     type="text"
                     placeholder="Search filters"
                     value={searchFilter}
                     onChange={(e) => setSearchFilter(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                    className="w-full py-2 pl-10 pr-4 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
               </div>
@@ -668,7 +441,7 @@ const Products = () => {
                       type="checkbox"
                       checked={selectedFilters.commercial}
                       onChange={(e) => toggleFilter('commercial', e.target.checked)}
-                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      className="text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                     />
                     <span className="text-sm text-gray-700">Commercial</span>
                   </label>
@@ -680,7 +453,7 @@ const Products = () => {
                       type="checkbox"
                       checked={selectedFilters.residential}
                       onChange={(e) => toggleFilter('residential', e.target.checked)}
-                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      className="text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                     />
                     <span className="text-sm text-gray-700">Residential</span>
                   </label>
@@ -692,7 +465,7 @@ const Products = () => {
                       type="checkbox"
                       checked={selectedFilters.allColorways}
                       onChange={(e) => toggleFilter('allColorways', e.target.checked)}
-                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      className="text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                     />
                     <span className="text-sm text-gray-700">All Colorways</span>
                   </label>
@@ -701,7 +474,7 @@ const Products = () => {
                 {/* Expandable Sections */}
                 <div className="space-y-3">
                   {/* Brand */}
-                  <div className="border-b border-gray-100 pb-2">
+                  <div className="pb-2 border-b border-gray-100">
                     <button
                       onClick={() => toggleSection('Brand')}
                       className="flex items-center justify-between w-full text-left"
@@ -710,14 +483,14 @@ const Products = () => {
                       <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${expandedSections.Brand ? 'rotate-180' : ''}`} />
                     </button>
                     {expandedSections.Brand && (
-                      <div className="mt-2 space-y-2 max-h-40 overflow-y-auto">
+                      <div className="mt-2 space-y-2 overflow-y-auto max-h-40">
                         {getUniqueValues('brandName').map(brand => (
                           <label key={brand} className="flex items-center space-x-2 cursor-pointer">
                             <input
                               type="checkbox"
                               checked={selectedFilters.brands.includes(brand)}
                               onChange={() => toggleArrayFilter('brands', brand)}
-                              className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                              className="text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                             />
                             <span className="text-xs text-gray-600">{brand}</span>
                           </label>
@@ -727,7 +500,7 @@ const Products = () => {
                   </div>
 
                   {/* Price Range */}
-                  <div className="border-b border-gray-100 pb-2">
+                  <div className="pb-2 border-b border-gray-100">
                     <button
                       onClick={() => toggleSection('Price Range')}
                       className="flex items-center justify-between w-full text-left"
@@ -765,7 +538,7 @@ const Products = () => {
                   </div>
 
                   {/* Color */}
-                  <div className="border-b border-gray-100 pb-2">
+                  <div className="pb-2 border-b border-gray-100">
                     <button
                       onClick={() => toggleSection('Color')}
                       className="flex items-center justify-between w-full text-left"
@@ -774,14 +547,14 @@ const Products = () => {
                       <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${expandedSections.Color ? 'rotate-180' : ''}`} />
                     </button>
                     {expandedSections.Color && (
-                      <div className="mt-2 space-y-2 max-h-40 overflow-y-auto">
+                      <div className="mt-2 space-y-2 overflow-y-auto max-h-40">
                         {getUniqueValues('colors').map(color => (
                           <label key={color} className="flex items-center space-x-2 cursor-pointer">
                             <input
                               type="checkbox"
                               checked={selectedFilters.colors.includes(color)}
                               onChange={() => toggleArrayFilter('colors', color)}
-                              className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                              className="text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                             />
                             <span className="text-xs text-gray-600">{color}</span>
                           </label>
@@ -791,7 +564,7 @@ const Products = () => {
                   </div>
 
                   {/* Country of Origin */}
-                  <div className="border-b border-gray-100 pb-2">
+                  <div className="pb-2 border-b border-gray-100">
                     <button
                       onClick={() => toggleSection('Country of Origin')}
                       className="flex items-center justify-between w-full text-left"
@@ -800,14 +573,14 @@ const Products = () => {
                       <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${expandedSections['Country of Origin'] ? 'rotate-180' : ''}`} />
                     </button>
                     {expandedSections['Country of Origin'] && (
-                      <div className="mt-2 space-y-2 max-h-40 overflow-y-auto">
+                      <div className="mt-2 space-y-2 overflow-y-auto max-h-40">
                         {getUniqueValues('country').map(country => (
                           <label key={country} className="flex items-center space-x-2 cursor-pointer">
                             <input
                               type="checkbox"
                               checked={selectedFilters.countries.includes(country)}
                               onChange={() => toggleArrayFilter('countries', country)}
-                              className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                              className="text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                             />
                             <span className="text-xs text-gray-600">{country}</span>
                           </label>
@@ -817,7 +590,7 @@ const Products = () => {
                   </div>
 
                   {/* Pattern */}
-                  <div className="border-b border-gray-100 pb-2">
+                  <div className="pb-2 border-b border-gray-100">
                     <button
                       onClick={() => toggleSection('Pattern')}
                       className="flex items-center justify-between w-full text-left"
@@ -826,14 +599,14 @@ const Products = () => {
                       <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${expandedSections.Pattern ? 'rotate-180' : ''}`} />
                     </button>
                     {expandedSections.Pattern && (
-                      <div className="mt-2 space-y-2 max-h-40 overflow-y-auto">
+                      <div className="mt-2 space-y-2 overflow-y-auto max-h-40">
                         {getUniqueValues('pattern').map(pattern => (
                           <label key={pattern} className="flex items-center space-x-2 cursor-pointer">
                             <input
                               type="checkbox"
                               checked={selectedFilters.patterns.includes(pattern)}
                               onChange={() => toggleArrayFilter('patterns', pattern)}
-                              className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                              className="text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                             />
                             <span className="text-xs text-gray-600">{pattern}</span>
                           </label>
@@ -843,7 +616,7 @@ const Products = () => {
                   </div>
 
                   {/* Features */}
-                  <div className="border-b border-gray-100 pb-2">
+                  <div className="pb-2 border-b border-gray-100">
                     <button
                       onClick={() => toggleSection('Features')}
                       className="flex items-center justify-between w-full text-left"
@@ -852,14 +625,14 @@ const Products = () => {
                       <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${expandedSections.Features ? 'rotate-180' : ''}`} />
                     </button>
                     {expandedSections.Features && (
-                      <div className="mt-2 space-y-2 max-h-40 overflow-y-auto">
+                      <div className="mt-2 space-y-2 overflow-y-auto max-h-40">
                         {getUniqueValues('features').map(feature => (
                           <label key={feature} className="flex items-center space-x-2 cursor-pointer">
                             <input
                               type="checkbox"
                               checked={selectedFilters.features.includes(feature)}
                               onChange={() => toggleArrayFilter('features', feature)}
-                              className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                              className="text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                             />
                             <span className="text-xs text-gray-600">{feature}</span>
                           </label>
@@ -869,7 +642,7 @@ const Products = () => {
                   </div>
 
                   {/* Application */}
-                  <div className="border-b border-gray-100 pb-2">
+                  <div className="pb-2 border-b border-gray-100">
                     <button
                       onClick={() => toggleSection('Application')}
                       className="flex items-center justify-between w-full text-left"
@@ -878,14 +651,14 @@ const Products = () => {
                       <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${expandedSections.Application ? 'rotate-180' : ''}`} />
                     </button>
                     {expandedSections.Application && (
-                      <div className="mt-2 space-y-2 max-h-40 overflow-y-auto">
+                      <div className="mt-2 space-y-2 overflow-y-auto max-h-40">
                         {getUniqueValues('application').map(application => (
                           <label key={application} className="flex items-center space-x-2 cursor-pointer">
                             <input
                               type="checkbox"
                               checked={selectedFilters.applications.includes(application)}
                               onChange={() => toggleArrayFilter('applications', application)}
-                              className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                              className="text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                             />
                             <span className="text-xs text-gray-600">{application}</span>
                           </label>
@@ -896,7 +669,7 @@ const Products = () => {
 
                   {/* Static sections that don't have content yet */}
                   {['Availability', 'Metallic Finish', 'Content', 'Flammability', 'Abrasion', 'Climate Impact', 'Human Health Impact', 'Social Equity Impact'].map((section) => (
-                    <div key={section} className="border-b border-gray-100 pb-2">
+                    <div key={section} className="pb-2 border-b border-gray-100">
                       <button
                         onClick={() => toggleSection(section)}
                         className="flex items-center justify-between w-full text-left"
@@ -917,7 +690,7 @@ const Products = () => {
           </div>
 
           {/* Products Content */}
-          <div className="flex-1 overflow-y-auto p-6">
+          <div className="flex-1 p-6 overflow-y-auto">
             {/* Category Tabs */}
             <div className="flex items-center gap-4 mb-6 border-b border-gray-200">
               {categories.map((category) => {
@@ -933,7 +706,7 @@ const Products = () => {
                     }`}
                   >
                     <span>{category.name}</span>
-                    <span className="bg-gray-900 text-white text-xs px-2 py-1 rounded">
+                    <span className="px-2 py-1 text-xs text-white bg-gray-900 rounded">
                       {count}
                     </span>
                   </button>
@@ -948,13 +721,13 @@ const Products = () => {
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-4">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <Search className="absolute w-4 h-4 text-gray-400 transform -translate-y-1/2 left-3 top-1/2" />
                   <input
                     type="text"
                     placeholder="Search products..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm w-64"
+                    className="w-64 py-2 pl-10 pr-4 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
                 <div className="flex items-center gap-2">
@@ -969,30 +742,30 @@ const Products = () => {
             </div>
 
             {/* Products Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
+            <div className="grid grid-cols-1 gap-6 mb-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {getCurrentPageProducts().length > 0 ? (
                 getCurrentPageProducts().map((product) => (
-                  <div key={product.id} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
-                    <div className="aspect-square bg-gray-100">
+                  <div key={product.id} className="overflow-hidden transition-shadow bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md">
+                    <div className="bg-gray-100 aspect-square">
                       <img
                         src={product.image}
                         alt={product.name}
-                        className="w-full h-full object-cover"
+                        className="object-cover w-full h-full"
                       />
                     </div>
                     <div className="p-4">
-                      <div className="text-xs text-gray-500 uppercase tracking-wide mb-1">
+                      <div className="mb-1 text-xs tracking-wide text-gray-500 uppercase">
                         {product.brand}
                       </div>
-                      <h3 className="font-medium text-gray-900 text-sm mb-2">
+                      <h3 className="mb-2 text-sm font-medium text-gray-900">
                         {product.name}
                       </h3>
-                      <div className="text-xs text-gray-600 mb-2">
+                      <div className="mb-2 text-xs text-gray-600">
                         ${product.price}
                       </div>
                       <div className="flex flex-wrap gap-1 mb-3">
                         {product.colors.slice(0, 2).map(color => (
-                          <span key={color} className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
+                          <span key={color} className="px-2 py-1 text-xs text-gray-600 bg-gray-100 rounded">
                             {color}
                           </span>
                         ))}
@@ -1008,8 +781,8 @@ const Products = () => {
                   </div>
                 ))
               ) : (
-                <div className="col-span-full text-center py-12">
-                  <div className="text-gray-500 mb-2">No products found</div>
+                <div className="py-12 text-center col-span-full">
+                  <div className="mb-2 text-gray-500">No products found</div>
                   <div className="text-sm text-gray-400">Try adjusting your filters or search terms</div>
                 </div>
               )}
@@ -1078,7 +851,7 @@ const Products = () => {
             )}
 
             {/* Pagination Info */}
-            <div className="text-center text-sm text-gray-500 mt-4">
+            <div className="mt-4 text-sm text-center text-gray-500">
               Showing {Math.min((currentPage - 1) * itemsPerPage + 1, filteredProducts.length)} to {Math.min(currentPage * itemsPerPage, filteredProducts.length)} of {filteredProducts.length} products
             </div>
           </div>
