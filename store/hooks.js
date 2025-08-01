@@ -11,3 +11,5 @@ export const useScrollSelector = (selector) =>
   useSelector((state) => selector(state.scroll));
 export const useMaterialsSelector = (selector) =>
   useSelector((state) => selector(state.materials));
+export const useAuthSelector = (selector) =>
+  useSelector((state) => selector(state.auth));

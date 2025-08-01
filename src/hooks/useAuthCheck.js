@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux';
 import { useToast } from '@/contexts/ToastContext';
 
 export const useAuthCheck = () => {
-  const { isSignedIn } = useSelector((state) => state.auth);
+  const { isAuthenticated } = useSelector((state) => state.auth);
   const { showAuthToast } = useToast();
 
   const requireAuth = (callback, message = "Sign in to access this feature") => {
@@ -10,12 +10,12 @@ export const useAuthCheck = () => {
       if (event) {
         event.preventDefault();
       }
-      
-      if (!isSignedIn) {
+
+      if (!isAuthenticated) {
         showAuthToast(message);
         return false;
       }
-      
+
       if (callback) {
         callback(event);
       }
@@ -24,7 +24,7 @@ export const useAuthCheck = () => {
   };
 
   return {
-    isSignedIn,
+    isSignedIn: isAuthenticated, // Legacy property name for backward compatibility
     requireAuth
   };
 };

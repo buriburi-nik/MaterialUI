@@ -133,7 +133,7 @@ const Toast = ({ message, type = 'info', isVisible, onClose, duration = 5000, sh
   const variants = {
     info: 'bg-blue-500 text-white',
     success: 'bg-green-500 text-white',
-    warning: 'bg-yellow-500 text-white',
+    warning: 'bg-yellow-500 text-black',
     error: 'bg-red-500 text-white',
   };
 

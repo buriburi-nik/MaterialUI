@@ -9,7 +9,6 @@ import StreamlineDesign from "@/components/X/StreamlineDesign";
 import Testimonials from "@/components/X/Testimonials";
 import Registration from "@/components/X/Registration";
 import Sustainability from "@/components/X/Sustainability";
-import Footer from "@/components/layout/Footer";
 
 export default function Index() {
   return (
@@ -51,8 +50,7 @@ export default function Index() {
       {/* Sustainability Section */}
       <Sustainability />
 
-      {/* Footer */}
-      <Footer />
+    
     </div>
   );
 }

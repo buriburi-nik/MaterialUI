@@ -1,223 +1,317 @@
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
-import { ChevronDown, Plus, FolderOpen, FileText, Headphones, Calendar } from "lucide-react";
-import Footer from "@/components/layout/Footer";
+import React, { useState, useEffect } from "react";
+import { useAuth } from "@/hooks/useAuth";
+import {
+  FolderOpen,
+  FileText,
+  Headphones,
+  Calendar,
+  MessageCircle,
+  Menu,
+  X,
+  Plus,
+  ChevronDown,
+} from "lucide-react";
 
 export default function Dashboard() {
-  const { user } = useSelector((state) => state.auth);
-  const [selectedProject, setSelectedProject] = useState("Choose project");
-  const [isProjectDropdownOpen, setIsProjectDropdownOpen] = useState(false);
-
-  const projects = [
-    "Office Renovation 2024",
-    "Residential Complex A",
-    "Hotel Lobby Design",
-    "Modern Apartment"
-  ];
+  const { user, userProfile } = useAuth();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   const sidebarItems = [
     {
       category: "Project resources",
       items: [
         { name: "Boards", icon: FolderOpen, count: null },
-        { name: "Notes", icon: FileText, count: null }
-      ]
+        { name: "Notes", icon: FileText, count: null },
+      ],
     },
     {
       category: "Messaging",
-      items: [
-        { name: "Help", icon: Headphones, count: null }
-      ]
+      items: [{ name: "Help", icon: Headphones, count: null }],
     },
     {
       category: "History",
-      items: [
-        { name: "Order history", icon: Calendar, count: null }
-      ]
-    }
+      items: [{ name: "Order history", icon: Calendar, count: null }],
+    },
   ];
 
+  useEffect(() => {
+    const checkScreenSize = () => {
+      const mobile = window.innerWidth < 1024;
+      setIsMobile(mobile);
+      setIsSidebarOpen(!mobile);
+    };
+
+    checkScreenSize();
+    window.addEventListener("resize", checkScreenSize);
+    return () => window.removeEventListener("resize", checkScreenSize);
+  }, []);
+
   const getUserDisplayName = () => {
-    if (!user?.email) return "User";
-    const email = user.email;
-    const localPart = email.split("@")[0];
-    return localPart.replace(".", " ");
+    if (userProfile?.fullName) return userProfile.fullName.toLowerCase();
+    if (user?.email)
+      return user.email.split("@")[0].replace(".", " ").toLowerCase();
+    return "user";
   };
 
+  const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
+  const closeSidebar = () => isMobile && setIsSidebarOpen(false);
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Main Content Area */}
-      <div className="flex pt-16">
+    <div className="flex flex-col h-screen overflow-hidden bg-gray-50">
+      {/* Mobile Menu Button */}
+      <div className="fixed z-50 top-4 left-4 lg:hidden">
+        <button
+          onClick={toggleSidebar}
+          className="p-3 transition-colors bg-white border border-gray-200 rounded-lg shadow-lg hover:bg-gray-50"
+          aria-label="Toggle sidebar"
+        >
+          <Menu className="w-5 h-5 text-gray-600" />
+        </button>
+      </div>
+
+      {/* Mobile Overlay */}
+      {isMobile && isSidebarOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black bg-opacity-50 lg:hidden"
+          onClick={closeSidebar}
+        />
+      )}
+
+      <div className="flex flex-1 h-0 overflow-hidden lg:pt-16">
         {/* Sidebar */}
-        <div className="w-80 bg-white border-r border-gray-200 min-h-screen p-6">
-          {/* Project Selector */}
-          <div className="mb-8">
-            <div className="relative">
-              <button
-                onClick={() => setIsProjectDropdownOpen(!isProjectDropdownOpen)}
-                className="w-full flex items-center justify-between p-3 text-left text-gray-700 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
-              >
-                <span className="font-medium">{selectedProject}</span>
-                <ChevronDown className="w-4 h-4 text-gray-500" />
-              </button>
-              
-              {isProjectDropdownOpen && (
-                <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
-                  {projects.map((project, index) => (
-                    <button
-                      key={index}
-                      onClick={() => {
-                        setSelectedProject(project);
-                        setIsProjectDropdownOpen(false);
-                      }}
-                      className="w-full px-3 py-2 text-left text-gray-700 hover:bg-gray-50 first:rounded-t-lg last:rounded-b-lg"
-                    >
-                      {project}
-                    </button>
-                  ))}
-                </div>
+        <div
+          className={`h-full bg-white border-r border-gray-200 transition-all duration-300 ease-in-out relative z-50 flex-shrink-0
+          ${
+            isMobile
+              ? `fixed top-0 left-0 ${
+                  isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+                } w-80`
+              : isSidebarOpen
+              ? "w-80"
+              : "w-16"
+          }`}
+        >
+          {!isMobile && (
+            <button
+              onClick={toggleSidebar}
+              className="absolute top-4 -right-3 z-20 p-1.5 bg-white border border-gray-200 rounded-full shadow-sm hover:bg-gray-50"
+              aria-label={isSidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
+            >
+              {isSidebarOpen ? (
+                <X className="w-4 h-4 text-gray-600" />
+              ) : (
+                <Menu className="w-4 h-4 text-gray-600" />
               )}
-            </div>
-          </div>
+            </button>
+          )}
 
-          {/* New Project Button */}
-          <button className="w-full flex items-center justify-center gap-3 p-4 mb-8 bg-gray-800 text-white rounded-full hover:bg-gray-700 transition-colors">
-            <Plus className="w-5 h-5" />
-            <span className="font-medium">New project</span>
-          </button>
+          {isMobile && (
+            <button
+              onClick={closeSidebar}
+              className="absolute z-20 p-2 transition-colors rounded-lg top-4 right-4 hover:bg-gray-100 lg:hidden"
+              aria-label="Close sidebar"
+            >
+              <X className="w-5 h-5 text-gray-600" />
+            </button>
+          )}
 
-          {/* Sidebar Navigation */}
-          <div className="space-y-8">
-            {sidebarItems.map((section, sectionIndex) => (
-              <div key={sectionIndex}>
-                <h3 className="text-sm font-medium text-gray-500 mb-4">
-                  {section.category}
-                </h3>
-                <div className="space-y-2">
-                  {section.items.map((item, itemIndex) => (
-                    <button
-                      key={itemIndex}
-                      className="w-full flex items-center gap-3 p-3 text-left text-gray-700 hover:bg-gray-50 rounded-lg transition-colors group"
-                    >
-                      <item.icon className="w-5 h-5 text-gray-500 group-hover:text-gray-700" />
-                      <span className="font-medium">{item.name}</span>
-                      {item.count && (
-                        <span className="ml-auto text-xs bg-gray-200 text-gray-600 px-2 py-1 rounded-full">
-                          {item.count}
-                        </span>
-                      )}
-                    </button>
-                  ))}
+          <div
+            className={`h-full flex flex-col transition-opacity duration-300 overflow-hidden ${
+              !isMobile && !isSidebarOpen
+                ? "opacity-0 pointer-events-none"
+                : "opacity-100"
+            }`}
+          >
+            <div className={`p-6 flex-1 ${isMobile ? "pt-16" : ""}`}>
+              <div className="mb-8">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="mb-4 text-sm font-medium text-gray-700">
+                    Choose project
+                  </span>
+                  <ChevronDown className="w-4 h-4 text-gray-500" />
                 </div>
+                <button className="flex items-center justify-center w-full gap-2 p-2 px-4 py-2 text-sm font-medium text-white bg-gray-800 rounded-full hover:bg-gray-700">
+                  <Plus className="w-4 h-4" />
+                  New project
+                </button>
               </div>
-            ))}
+
+              {/* Sidebar Navigation */}
+              <div className="space-y-8">
+                {sidebarItems.map((section, sectionIndex) => (
+                  <div key={sectionIndex}>
+                    <h3 className="mb-4 text-sm font-medium text-gray-500">
+                      {section.category}
+                    </h3>
+                    <div className="space-y-2">
+                      {section.items.map((item, itemIndex) => (
+                        <button
+                          key={itemIndex}
+                          onClick={closeSidebar}
+                          className="flex items-center w-full gap-3 p-1 text-left text-gray-700 transition-colors rounded-lg hover:bg-gray-50 group"
+                        >
+                          <item.icon className="flex-shrink-0 w-5 h-5 text-gray-500 group-hover:text-gray-700" />
+                          <span className="font-medium">{item.name}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Collapsed Sidebar Icons */}
+            {!isMobile && !isSidebarOpen && (
+              <div className="flex flex-col items-center h-full py-6 space-y-4">
+                <button
+                  onClick={toggleSidebar}
+                  className="p-2 text-gray-600 transition-colors rounded-lg hover:bg-gray-50"
+                  title="Expand sidebar"
+                >
+                  <Menu className="w-5 h-5" />
+                </button>
+                {sidebarItems.flatMap((section, idx) =>
+                  section.items.map((item, index) => (
+                    <button
+                      key={`${section.category}-${index}`}
+                      className="p-2 text-gray-600 transition-colors rounded-lg hover:bg-gray-50"
+                      title={item.name}
+                    >
+                      <item.icon className="w-5 h-5" />
+                    </button>
+                  ))
+                )}
+              </div>
+            )}
           </div>
         </div>
 
         {/* Main Content */}
-        <div className="flex-1 p-8">
-          <div className="max-w-4xl">
-            {/* Welcome Header */}
-            <div className="mb-8">
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                Welcome back, {getUserDisplayName()}!
-              </h1>
-              <p className="text-gray-600">
-                Manage your projects, explore materials, and track your sample orders.
-              </p>
-            </div>
+        <div className="flex flex-col flex-1 h-full overflow-hidden">
+          <div
+            className={`flex-1 ${isMobile ? "p-4 pt-20" : "p-8"}`}
+            style={{
+              overflowY: "auto",
+              scrollbarWidth: "none",
+              msOverflowStyle: "none",
+            }}
+          >
+            <div className="max-w-5xl mx-auto">
+              {/* Greeting */}
+              <div className="mb-8 text-center">
+                <h1
+                  className={`font-normal text-gray-800 ${
+                    isMobile ? "text-xl" : "text-2xl"
+                  }`}
+                >
+                  Hello, {getUserDisplayName()}
+                </h1>
+              </div>
 
-            {/* Dashboard Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-              {/* Quick Actions Card */}
-              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
-                <div className="space-y-3">
-                  <button className="w-full text-left p-3 hover:bg-gray-50 rounded-lg transition-colors">
-                    <div className="font-medium text-gray-900">Start New Project</div>
-                    <div className="text-sm text-gray-500">Create a project and begin sampling</div>
-                  </button>
-                  <button className="w-full text-left p-3 hover:bg-gray-50 rounded-lg transition-colors">
-                    <div className="font-medium text-gray-900">Browse Materials</div>
-                    <div className="text-sm text-gray-500">Explore our material library</div>
-                  </button>
-                  <button className="w-full text-left p-3 hover:bg-gray-50 rounded-lg transition-colors">
-                    <div className="font-medium text-gray-900">View Brands</div>
-                    <div className="text-sm text-gray-500">See all available brands</div>
+              {/* Residence Card */}
+              <div className="max-w-2xl mx-auto mb-12">
+                <div
+                  className={`text-center text-white bg-green-900 rounded-2xl ${
+                    isMobile ? "p-6" : "p-8"
+                  }`}
+                >
+                  <div className="mb-4">
+                    <p className="mb-2 text-sm font-medium opacity-90">
+                      ARTIST'S RESIDENCE
+                    </p>
+                    <h2
+                      className={`mb-2 font-bold ${
+                        isMobile ? "text-xl" : "text-2xl"
+                      }`}
+                    >
+                      Curated by Creatives
+                    </h2>
+                    <p className="text-sm opacity-90">
+                      Win a 2-night stay for 2 at Château La Coste in Provence.
+                    </p>
+                  </div>
+                  <div className="mb-6">
+                    <img
+                      src="https://materialbank-eu-cdn.freetls.fastly.net/media/wysiwyg/CC_20250625_2.jpg"
+                      alt="Curated materials and samples"
+                      className={`object-cover w-full rounded-lg ${
+                        isMobile ? "h-40" : "h-48"
+                      }`}
+                    />
+                  </div>
+                  <button className="px-6 py-2 font-medium text-gray-800 transition-colors bg-white rounded-full hover:bg-gray-100">
+                    Learn more
                   </button>
                 </div>
               </div>
 
-              {/* Recent Projects Card */}
-              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Projects</h3>
-                <div className="space-y-3">
-                  {projects.slice(0, 3).map((project, index) => (
-                    <div key={index} className="p-3 border border-gray-100 rounded-lg">
-                      <div className="font-medium text-gray-900">{project}</div>
-                      <div className="text-sm text-gray-500">Updated 2 days ago</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Sample Orders Card */}
-              <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Sample Orders</h3>
-                <div className="space-y-3">
-                  <div className="p-3 border border-gray-100 rounded-lg">
-                    <div className="font-medium text-gray-900">Order #2024-001</div>
-                    <div className="text-sm text-green-600">Delivered</div>
-                  </div>
-                  <div className="p-3 border border-gray-100 rounded-lg">
-                    <div className="font-medium text-gray-900">Order #2024-002</div>
-                    <div className="text-sm text-blue-600">In Transit</div>
-                  </div>
-                  <div className="p-3 border border-gray-100 rounded-lg">
-                    <div className="font-medium text-gray-900">Order #2024-003</div>
-                    <div className="text-sm text-yellow-600">Processing</div>
+              {/* Content Grid */}
+              <div className="grid max-w-2xl gap-8 mx-auto mb-8 lg:grid-cols-1">
+                {/* Current Project */}
+                <div className="p-6 bg-white shadow-sm rounded-xl">
+                  <h3 className="mb-6 text-lg font-semibold text-gray-800">
+                    Current Project
+                  </h3>
+                  <div className="py-8 text-center">
+                    <h4 className="mb-4 text-base font-medium text-gray-600">
+                      No projects yet
+                    </h4>
+                    <p className="mb-8 text-sm leading-relaxed text-gray-500">
+                      Projects help keep you organized and allow for a more
+                      <br />
+                      personalized experience.
+                    </p>
+                    <button className="inline-flex items-center gap-2 text-sm text-gray-600 transition-colors hover:text-gray-800">
+                      <Plus className="w-4 h-4" />
+                      Create a new project
+                    </button>
                   </div>
                 </div>
-              </div>
-            </div>
 
-            {/* Recent Activity */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-              <div className="p-6 border-b border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-900">Recent Activity</h3>
-              </div>
-              <div className="p-6">
-                <div className="space-y-4">
-                  <div className="flex items-start gap-4">
-                    <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
-                    <div>
-                      <div className="font-medium text-gray-900">New samples ordered</div>
-                      <div className="text-sm text-gray-500">Office Renovation 2024 • 2 hours ago</div>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-4">
-                    <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
-                    <div>
-                      <div className="font-medium text-gray-900">Project created</div>
-                      <div className="text-sm text-gray-500">Modern Apartment • 1 day ago</div>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-4">
-                    <div className="w-2 h-2 bg-yellow-500 rounded-full mt-2"></div>
-                    <div>
-                      <div className="font-medium text-gray-900">Board updated</div>
-                      <div className="text-sm text-gray-500">Hotel Lobby Design • 3 days ago</div>
-                    </div>
+                {/* Recent Boards */}
+                <div className="p-6 bg-white shadow-sm rounded-xl">
+                  <h3 className="mb-6 text-lg font-semibold text-gray-800">
+                    Recent Boards
+                  </h3>
+                  <div className="py-8 text-center">
+                    <h4 className="mb-4 text-base font-medium text-gray-600">
+                      No boards yet
+                    </h4>
+                    <p className="mb-8 text-sm leading-relaxed text-gray-500">
+                      Create, present, and share expressive concepts with Boards.
+                      {!isMobile && <br />}
+                      Design starts here.™
+                    </p>
+                    <button className="inline-flex items-center gap-2 text-sm text-gray-600 transition-colors hover:text-gray-800">
+                      <Plus className="w-4 h-4" />
+                      Create a new board
+                    </button>
                   </div>
                 </div>
               </div>
             </div>
           </div>
+
+          {/* Hide scrollbar in WebKit browsers */}
+          <style>{`
+            div::-webkit-scrollbar {
+              display: none;
+            }
+          `}</style>
         </div>
       </div>
 
-      {/* Footer */}
-      <Footer />
+      {/* Chat Button */}
+      <div
+        className={`fixed z-30 ${
+          isMobile ? "bottom-4 right-4" : "bottom-6 right-6"
+        }`}
+      >
+        <button className="p-3 text-white transition-colors bg-gray-800 rounded-full shadow-lg hover:bg-gray-700">
+          <MessageCircle className={`${isMobile ? "w-5 h-5" : "w-6 h-6"}`} />
+        </button>
+      </div>
     </div>
   );
 }

@@ -3,6 +3,11 @@ import uiReducer from "./slices/uiSlice";
 import scrollReducer from "./slices/scrollSlice";
 import materialsReducer from "./slices/materialsSlice";
 import authReducer from "./slices/authSlice";
+import {
+  authListenerMiddleware,
+  authTokenMiddleware,
+  authErrorMiddleware
+} from "./middleware/authMiddleware";
 
 export const store = configureStore({
   reducer: {
@@ -16,5 +21,7 @@ export const store = configureStore({
       serializableCheck: {
         ignoredActions: ["persist/PERSIST"],
       },
-    }),
+    })
+    .prepend(authListenerMiddleware.middleware)
+    .concat(authTokenMiddleware, authErrorMiddleware),
 });

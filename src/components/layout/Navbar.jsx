@@ -4,8 +4,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { Button } from "@/components/ui/button";
 import { Menu, X, Globe, ChevronDown, Search, ShoppingCart } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useAuthCheck } from "@/hooks/useAuthCheck";
-import { signOut } from "../../../store/slices/authSlice";
+import { useAuth, useAuthProtection } from "@/hooks/useAuth";
+import { useToast } from "@/contexts/ToastContext";
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -13,12 +13,12 @@ export default function Navbar() {
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { requireAuth } = useAuthCheck();
-  const { user, isSignedIn } = useSelector((state) => state.auth);
+  const { isAuthenticated, user, userProfile, logout } = useAuth();
+  const { requireAuth } = useAuthProtection();
+  const { showAuthToast } = useToast();
 
   const handleSignOut = () => {
-    dispatch(signOut());
-    navigate("/");
+    logout({ showSuccessToast: true });
   };
 
   const getInitials = (user) => {
@@ -68,7 +68,7 @@ export default function Navbar() {
           {/* Logo */}
           <div className="flex items-center">
             <button
-              onClick={() => navigate(isSignedIn ? "/dashboard" : "/")}
+              onClick={() => navigate(isAuthenticated ? "/dashboard" : "/")}
               className="flex items-center justify-center p-1 transition-colors duration-200 rounded-lg hover:bg-gray-50 cursor-pointer"
             >
               <svg
@@ -97,7 +97,7 @@ export default function Navbar() {
               {/* Products dropdown */}
               <div
                 className="relative flex items-center space-x-1 transition-all cursor-pointer group"
-                onClick={isSignedIn ? null : requireAuth(null, "Sign in to explore our product catalog")}
+                onClick={isAuthenticated ? null : () => showAuthToast("Sign in to explore our product catalog")}
               >
                 <span className="font-medium text-gray-700 transition-colors duration-200 group-hover:text-gray-900">
                   Products
@@ -105,7 +105,7 @@ export default function Navbar() {
                 <ChevronDown className="w-4 h-4 text-gray-500 transition-transform duration-300 group-hover:rotate-180" />
 
                 {/* Optional dropdown panel */}
-                {isSignedIn && (
+                {isAuthenticated && (
                   <div className="absolute top-full mt-2 hidden group-hover:flex flex-col bg-white border border-gray-200 rounded-md shadow-lg p-3 min-w-[150px] z-10">
                     <a href="#product1" className="px-2 py-1 text-sm text-gray-700 rounded hover:bg-gray-100">Product 1</a>
                     <a href="#product2" className="px-2 py-1 text-sm text-gray-700 rounded hover:bg-gray-100">Product 2</a>
@@ -118,7 +118,11 @@ export default function Navbar() {
                 href="/brands"
                 onClick={(e) => {
                   e.preventDefault();
-                  navigate("/brands");
+                  if (isAuthenticated) {
+                    navigate("/brands");
+                  } else {
+                    showAuthToast("Sign in to explore our brand catalog");
+                  }
                 }}
                 className="font-medium text-gray-700 transition-colors duration-200 hover:text-gray-900 hover:underline cursor-pointer"
               >
@@ -127,7 +131,7 @@ export default function Navbar() {
             </div>
 
             {/* Search Bar - Only show when authenticated */}
-            {isSignedIn && (
+            {isAuthenticated && (
               <div className="flex-1 max-w-lg mx-8">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -150,7 +154,7 @@ export default function Navbar() {
               <Globe className="w-4 h-4" />
             </Button>
 
-            {isSignedIn ? (
+            {isAuthenticated ? (
               /* Authenticated state */
               <>
                 {/* User Profile */}
@@ -247,7 +251,7 @@ export default function Navbar() {
             </div>
             <div className="px-4 py-3 space-y-3">
               {/* Search Bar - Only show when authenticated */}
-              {isSignedIn && (
+              {isAuthenticated && (
                 <div className="mb-4">
                   <div className="relative">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -265,7 +269,7 @@ export default function Navbar() {
               {/* Products dropdown */}
               <div
                 className="flex items-center justify-between px-3 py-3 transition-colors rounded-md cursor-pointer hover:bg-gray-50"
-                onClick={isSignedIn ? null : requireAuth(null, "Sign in to explore our product catalog")}
+                onClick={isAuthenticated ? null : () => showAuthToast("Sign in to explore our product catalog")}
               >
                 <span className="font-medium text-gray-700">Products</span>
                 <ChevronDown className="w-4 h-4 text-gray-500" />
@@ -278,7 +282,11 @@ export default function Navbar() {
                 onClick={(e) => {
                   e.preventDefault();
                   setIsMobileMenuOpen(false);
-                  navigate("/brands");
+                  if (isAuthenticated) {
+                    navigate("/brands");
+                  } else {
+                    showAuthToast("Sign in to explore our brand catalog");
+                  }
                 }}
               >
                 Brands
@@ -298,7 +306,7 @@ export default function Navbar() {
                   Language
                 </Button>
 
-                {isSignedIn ? (
+                {isAuthenticated ? (
                   /* Authenticated mobile actions */
                   <>
                     {/* User Profile */}

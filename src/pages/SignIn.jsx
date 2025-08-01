@@ -1,52 +1,15 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
+import { useLoginForm } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowLeft, Eye, EyeOff } from "lucide-react";
-
-
-import { updateSignInForm, clearSignInForm, setLoading, setError, signInSuccess } from "../../store/slices/authSlice";
+import { EXTERNAL_ASSETS } from "@assets";
 
 export default function SignIn() {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { signInForm, isLoading, error } = useSelector((state) => state.auth);
+  const { form, validation, updateField, handleSubmit, isLoading } = useLoginForm();
   const [showPassword, setShowPassword] = React.useState(false);
-
-  const handleInputChange = (field, value) => {
-    dispatch(updateSignInForm({ field, value }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    dispatch(setLoading(true));
-    dispatch(setError(null));
-
-    // Basic validation for sign in (just email and password)
-    if (!signInForm.email || !signInForm.password) {
-      dispatch(setError("Please fill in all required fields"));
-      dispatch(setLoading(false));
-      return;
-    }
-
-    // Simulate API call
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      
-      // Mock successful sign in
-      dispatch(signInSuccess({
-        id: Date.now(),
-        email: signInForm.email,
-      }));
-      
-      dispatch(clearSignInForm());
-      navigate("/dashboard");
-    } catch (err) {
-      dispatch(setError("Failed to sign in. Please try again."));
-      dispatch(setLoading(false));
-    }
-  };
 
   return (
     <div className="flex min-h-screen bg-white">
@@ -61,29 +24,28 @@ export default function SignIn() {
             <ArrowLeft className="w-4 h-4 mr-1" />
             <span className="text-sm">Back</span>
           </button>
-          <span className="text-sm text-gray-600">Join for free</span>
+          <Link to="/register" className="text-sm text-gray-600 hover:text-gray-900">
+            Join for free
+          </Link>
         </div>
 
         <div className="flex flex-col items-center justify-center h-full p-12">
-          {/* Logo */}
-          
-
           <div className="max-w-md text-center">
-            <h1 className="mb-6 text-4xl font-bold leading-tight text-gray-900">              The fastest and most sustainable way to search and sample materials
+            <h1 className="mb-6 text-4xl font-bold leading-tight text-gray-900">
+              The fastest and most sustainable way to search and sample materials
             </h1>
-            <p className="text-gray-600 ">
+            <p className="text-gray-600">
               Hundreds of leading brands. One site. Order by 16:30 CET. 
               Samples tomorrow. Free for architects and interior designers.
             </p>
             
             {/* Material Box Image */}
-            <div className="max-w-sm ">
+            <div className="max-w-sm">
               <img
-                src="https://www.materialbank.eu/static/version1753374402/frontend/MaterialBank/mb-eu/en_US/Magento_Customer/images/register_background.png"
+                src={EXTERNAL_ASSETS.AUTH.REGISTER_BACKGROUND}
                 alt="Material Bank box with material samples"
                 className="w-full h-auto mb-4 rounded-lg"
               />
-              
             </div>
           </div>
         </div>
@@ -101,7 +63,9 @@ export default function SignIn() {
               <ArrowLeft className="w-4 h-4 mr-1" />
               <span className="text-sm">Back</span>
             </button>
-            <span className="text-sm text-gray-600">Join for free</span>
+            <Link to="/register" className="text-sm text-gray-600 hover:text-gray-900">
+              Join for free
+            </Link>
           </div>
 
           {/* Sign In Header */}
@@ -119,20 +83,19 @@ export default function SignIn() {
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-6">
-            {error && (
-              <div className="px-4 py-3 text-sm text-red-700 border border-red-200 rounded-md bg-red-50">
-                {error}
-              </div>
-            )}
+        
+         
 
             {/* Business Email */}
             <div>
               <Input
                 id="email"
                 type="email"
-                value={signInForm.email}
-                onChange={(e) => handleInputChange("email", e.target.value)}
-                className="w-full px-3 py-3 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                value={form.email}
+                onChange={(e) => updateField("email", e.target.value)}
+                className={`w-full px-3 py-3 text-gray-900 placeholder-gray-500 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                  validation.errors.email ? 'border-red-300' : 'border-gray-300'
+                }`}
                 placeholder="Business Email"
                 required
               />
@@ -143,9 +106,11 @@ export default function SignIn() {
               <Input
                 id="password"
                 type={showPassword ? "text" : "password"}
-                value={signInForm.password}
-                onChange={(e) => handleInputChange("password", e.target.value)}
-                className="w-full px-3 py-3 pr-10 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                value={form.password}
+                onChange={(e) => updateField("password", e.target.value)}
+                className={`w-full px-3 py-3 pr-10 text-gray-900 placeholder-gray-500 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                  validation.errors.password ? 'border-red-300' : 'border-gray-300'
+                }`}
                 placeholder="Password"
                 required
               />
@@ -160,6 +125,20 @@ export default function SignIn() {
                   <Eye className="w-5 h-5 text-gray-400" />
                 )}
               </button>
+            </div>
+
+            {/* Remember Me */}
+            <div className="flex items-center">
+              <input
+                id="rememberMe"
+                type="checkbox"
+                checked={form.rememberMe}
+                onChange={(e) => updateField("rememberMe", e.target.checked)}
+                className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+              />
+              <label htmlFor="rememberMe" className="ml-2 text-sm text-gray-600">
+                Remember me
+              </label>
             </div>
 
             {/* Terms and Forgot Password */}
@@ -186,8 +165,8 @@ export default function SignIn() {
             {/* Sign In Button */}
             <Button
               type="submit"
-              disabled={isLoading}
-              className="w-full py-3 font-medium text-white transition-colors bg-gray-600 rounded-md hover:bg-gray-700"
+              disabled={!validation.canSubmit || isLoading}
+              className="w-full py-3 font-medium text-white transition-colors bg-gray-600 rounded-md hover:bg-gray-700 disabled:opacity-50"
             >
               {isLoading ? "Signing In..." : "Sign In"}
             </Button>

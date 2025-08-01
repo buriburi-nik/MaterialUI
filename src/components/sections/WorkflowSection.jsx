@@ -1,4 +1,5 @@
 import React from "react";
+import { EXTERNAL_ASSETS } from "@assets";
 
 // FeatureCard Component
 function FeatureCard({ title, features, children }) {
@@ -98,7 +99,7 @@ export default function WorkflowSection() {
             >
               <BrowserWindow url="materialbank.com/messages">
                 <img
-                  src="https://materialbank-eu-cdn.freetls.fastly.net/media/wysiwyg/homepage/Communicate_directly_with_Brand_Reps.webp"
+                  src={EXTERNAL_ASSETS.WORKFLOW.COMMUNICATE}
                   alt="Communicate directly with Brand Reps interface showing messaging with brand representatives"
                   className="object-cover w-full h-full"
                   loading="lazy"
@@ -115,7 +116,7 @@ export default function WorkflowSection() {
             >
               <BrowserWindow url="materialbank.com/boards">
                 <img
-                  src="https://materialbank-eu-cdn.freetls.fastly.net/media/wysiwyg/homepage/Save_materials_you_like_sample_later.webp"
+                  src={EXTERNAL_ASSETS.WORKFLOW.SAVE_MATERIALS}
                   alt="Material board interface showing saved materials and sampling options"
                   className="object-cover w-full h-full"
                   loading="lazy"

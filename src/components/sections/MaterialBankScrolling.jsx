@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { EXTERNAL_ASSETS } from "@assets";
 
 const MaterialBankScrolling = () => {
   
@@ -41,7 +42,7 @@ const MaterialBankScrolling = () => {
           
           <div className="relative">
             <img
-              src="https://materialbank-eu-cdn.freetls.fastly.net/media/wysiwyg/homepage/box_green2.webp"
+              src={EXTERNAL_ASSETS.BOXES.GREEN}
               alt="Material Bank Box"
               className="object-contain h-auto max-h-[75vh] w-auto rounded-2xl drop-shadow-2xl transition-all duration-500 hover:scale-105"
             />
