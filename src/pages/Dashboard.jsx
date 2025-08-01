@@ -57,7 +57,7 @@ export default function Dashboard() {
   const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
 
   return (
-    <div className="flex flex-col h-screen overflow-hidden bg-gray-50">
+    <div className="flex flex-col h-screen mt-20 overflow-hidden bg-gray-50 md:mt-0">
       <div className="flex flex-1 h-0 overflow-hidden lg:pt-16">
         {/* Sidebar */}
         {isMobile ? (
