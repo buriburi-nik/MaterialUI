@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { EXTERNAL_ASSETS } from "@assets";
 
 function interpolateColor(color1, color2, factor) {
   const c1 = parseInt(color1.slice(1), 16);
@@ -25,18 +26,15 @@ export default function ScrollingHero() {
 
   const materialBoxes = [
     {
-      image:
-        "https://materialbank-eu-cdn.freetls.fastly.net/media/wysiwyg/homepage/box_blue2.webp",
+      image: EXTERNAL_ASSETS.BOXES.BLUE,
       bgColor: "#97a2c2",
     },
     {
-      image:
-        "https://materialbank-eu-cdn.freetls.fastly.net/media/wysiwyg/homepage/box_red2.webp",
+      image: EXTERNAL_ASSETS.BOXES.RED,
       bgColor: "#7f3c36",
     },
     {
-      image:
-        "https://materialbank-eu-cdn.freetls.fastly.net/media/wysiwyg/homepage/moss_box2.webp",
+      image: EXTERNAL_ASSETS.BOXES.MOSS,
       bgColor: "#38a490",
     },
   ];
